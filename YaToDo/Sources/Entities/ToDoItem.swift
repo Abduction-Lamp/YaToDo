@@ -4,6 +4,26 @@
 //
 //  Created by Владимир on 15.11.2022.
 //
+//
+//  Яндекс Академия
+//  Школа мобильной разработки 2021: iOS
+//  https://www.youtube.com/watch?v=ik3Jw-GCzUY
+//
+//  1.    Реализовать структуру(!) TodoItem
+//  - Иммутабельная структура (все поля let)
+//  - Содержит уникальный id, если не задан пользователем - генерируется (uuidString)
+//  - Обязательное строковое поле text
+//  - Содержит обязательное поле важность - enum - неважный, обычный, важный
+//  - Содержит дедлайн, может быть не задан, если задан - дата
+//
+//  2.    Реализовать расширение TodoItem для работы с JSON
+//  - Содержит функцию ststic func parse(json: Any)->TodoItem? - для разбора JSON
+//  - Содержет вычислимое свойство var json: Any - для формирование JSON
+//  - Не сохраняем в JSON важность, если она обычная
+//  - Не сохраняем в JSON сложные объекты (Data перевести в UTC)
+//  - Сохраняем в JSON deadline только если он задан
+//  - Обязательно использовать JSONSerialization
+//
 
 import Foundation
 
@@ -14,7 +34,6 @@ struct ToDoItem {
     let date: Date
     let deadline: Date?
 
-    
     init(id: String = UUID.init().uuidString,
          text: String,
          priority: Priority = .normal,
