@@ -12,7 +12,7 @@
 		4E21D6C52922620200B8A4DA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6C42922620200B8A4DA /* ViewController.swift */; };
 		4E21D6CA2922620300B8A4DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E21D6C92922620300B8A4DA /* Assets.xcassets */; };
 		4E21D6CD2922620300B8A4DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E21D6CB2922620300B8A4DA /* LaunchScreen.storyboard */; };
-		4E21D6D82922620400B8A4DA /* YaToDoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6D72922620400B8A4DA /* YaToDoTests.swift */; };
+		4E21D6D82922620400B8A4DA /* ToDoItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6D72922620400B8A4DA /* ToDoItemTests.swift */; };
 		4E21D6E22922620400B8A4DA /* YaToDoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6E12922620400B8A4DA /* YaToDoUITests.swift */; };
 		4E21D6E42922620400B8A4DA /* YaToDoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6E32922620400B8A4DA /* YaToDoUITestsLaunchTests.swift */; };
 		4E21D6F429226B5500B8A4DA /* AppKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6F329226B5500B8A4DA /* AppKeys.swift */; };
@@ -46,7 +46,7 @@
 		4E21D6CC2922620300B8A4DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4E21D6CE2922620300B8A4DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4E21D6D32922620400B8A4DA /* YaToDoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YaToDoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4E21D6D72922620400B8A4DA /* YaToDoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YaToDoTests.swift; sourceTree = "<group>"; };
+		4E21D6D72922620400B8A4DA /* ToDoItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemTests.swift; sourceTree = "<group>"; };
 		4E21D6DD2922620400B8A4DA /* YaToDoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YaToDoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E21D6E12922620400B8A4DA /* YaToDoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YaToDoUITests.swift; sourceTree = "<group>"; };
 		4E21D6E32922620400B8A4DA /* YaToDoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YaToDoUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 		4E21D6D62922620400B8A4DA /* YaToDoTests */ = {
 			isa = PBXGroup;
 			children = (
-				4E21D6D72922620400B8A4DA /* YaToDoTests.swift */,
+				4E21D6FA2923D63800B8A4DA /* Entities */,
 			);
 			path = YaToDoTests;
 			sourceTree = "<group>";
@@ -161,6 +161,14 @@
 			children = (
 				4E21D6F82923C5DF00B8A4DA /* Priority.swift */,
 				4E21D6F62923C28E00B8A4DA /* ToDoItem.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		4E21D6FA2923D63800B8A4DA /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				4E21D6D72922620400B8A4DA /* ToDoItemTests.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -308,7 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E21D6D82922620400B8A4DA /* YaToDoTests.swift in Sources */,
+				4E21D6D82922620400B8A4DA /* ToDoItemTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

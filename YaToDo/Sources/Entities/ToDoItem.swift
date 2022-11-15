@@ -53,15 +53,6 @@ extension ToDoItem {
         return ToDoItem(id: id, text: text, priority: priority, date: Date(timeIntervalSince1970: date), deadline: deadline)
     }
     
-    static func parse(_ data: Data) -> ToDoItem? {
-        do {
-            let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
-            return ToDoItem.parse(json)
-        } catch {
-            return nil
-        }
-    }
-    
     var json: Any {
         var jsonObj = [String: Any]()
         jsonObj["id"] = id
@@ -72,5 +63,17 @@ extension ToDoItem {
             jsonObj["priority"] = priority.rawValue
         }
         return jsonObj
+    }
+}
+
+
+extension ToDoItem: Equatable {
+    
+    static func == (lhs: ToDoItem, rhs: ToDoItem) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.text == rhs.text &&
+        lhs.priority == rhs.priority &&
+        lhs.date == rhs.date &&
+        lhs.deadline == rhs.deadline
     }
 }
