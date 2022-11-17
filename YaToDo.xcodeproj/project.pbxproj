@@ -19,6 +19,7 @@
 		4E21D6F72923C28E00B8A4DA /* ToDoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6F62923C28E00B8A4DA /* ToDoItem.swift */; };
 		4E21D6F92923C5DF00B8A4DA /* Priority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6F82923C5DF00B8A4DA /* Priority.swift */; };
 		4E21D6FE2923E92300B8A4DA /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6FD2923E92300B8A4DA /* FileCache.swift */; };
+		4E4BEA022926655200F14C3F /* FileCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4BEA012926655200F14C3F /* FileCacheTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		4E21D6F62923C28E00B8A4DA /* ToDoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItem.swift; sourceTree = "<group>"; };
 		4E21D6F82923C5DF00B8A4DA /* Priority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Priority.swift; sourceTree = "<group>"; };
 		4E21D6FD2923E92300B8A4DA /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
+		4E4BEA012926655200F14C3F /* FileCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCacheTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 		4E21D6D62922620400B8A4DA /* YaToDoTests */ = {
 			isa = PBXGroup;
 			children = (
+				4E4BE9FF2926650E00F14C3F /* Services */,
 				4E21D6FA2923D63800B8A4DA /* Entities */,
 			);
 			path = YaToDoTests;
@@ -188,6 +191,22 @@
 			isa = PBXGroup;
 			children = (
 				4E21D6FD2923E92300B8A4DA /* FileCache.swift */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
+		4E4BE9FF2926650E00F14C3F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4E4BEA002926653400F14C3F /* Cache */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		4E4BEA002926653400F14C3F /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				4E4BEA012926655200F14C3F /* FileCacheTests.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -336,6 +355,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E4BEA022926655200F14C3F /* FileCacheTests.swift in Sources */,
 				4E21D6D82922620400B8A4DA /* ToDoItemTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
