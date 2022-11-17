@@ -12,4 +12,5 @@ struct AppKeys {
     static let shared = AppKeys()
     private init() { }
     
+    let homeDirectory = "YaToDo"
 }
