@@ -36,7 +36,7 @@ class ToDoItemTests: XCTestCase {
     func testJsonFull() throws {
         let id = "id"
         let text = "String"
-        let date = Date(timeIntervalSince1970: Date.init().timeIntervalSince1970)
+        let date = Date()
         
         let item = ToDoItem(id: id, text: text, priority: .high, date: date, deadline: date)
         XCTAssertEqual(item.id, id)
@@ -57,17 +57,18 @@ class ToDoItemTests: XCTestCase {
     func testParseByJson() throws {
         let id = "id"
         let text = "String"
-        let date = Date(timeIntervalSince1970: Date.init().timeIntervalSince1970)
+        let date = Date()
+        let deadline = Date()
         
-        let item = ToDoItem(id: id, text: text, priority: .high, date: date, deadline: date)
+        let item = ToDoItem(id: id, text: text, priority: .high, date: date, deadline: deadline)
         let json = item.json
         
         let todoItem = ToDoItem.parse(json)
         XCTAssertEqual(item.id, todoItem?.id)
         XCTAssertEqual(item.text, todoItem?.text)
         XCTAssertEqual(item.priority, todoItem?.priority)
-        XCTAssertEqual(item.date, todoItem?.date)
-        XCTAssertEqual(item.deadline, todoItem?.deadline)
+        XCTAssertEqual(item.date.timeIntervalSince1970, todoItem?.date.timeIntervalSince1970)
+        XCTAssertEqual(item.deadline?.timeIntervalSince1970, todoItem?.deadline?.timeIntervalSince1970)
         
         XCTAssertEqual(item, todoItem)
     }

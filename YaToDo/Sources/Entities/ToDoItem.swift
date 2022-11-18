@@ -40,7 +40,7 @@ struct ToDoItem {
          date: Date? = nil,
          deadline: Date? = nil
     ) {
-        self.date = date ?? Date(timeIntervalSince1970: Date.init().timeIntervalSince1970)
+        self.date = date ?? Date()
         self.id = id
         self.text = text
         self.priority = priority
@@ -65,8 +65,8 @@ extension ToDoItem {
         }
 
         var deadline: Date?
-        if let deadlineUTC = jsonObj["deadline"] as? TimeInterval {
-            deadline = Date(timeIntervalSince1970: deadlineUTC)
+        if let timeDeadline = jsonObj["deadline"] as? TimeInterval {
+            deadline = Date(timeIntervalSince1970: timeDeadline)
         }
         
         return ToDoItem(id: id, text: text, priority: priority, date: Date(timeIntervalSince1970: date), deadline: deadline)

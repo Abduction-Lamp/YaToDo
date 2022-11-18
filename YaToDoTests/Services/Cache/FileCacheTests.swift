@@ -19,9 +19,14 @@ class FileCacheTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        XCTAssertTrue(cache.removeAll())
+        XCTAssertTrue(cache.cache.count == 0)
         cache = nil
     }
+}
 
+extension FileCacheTests {
+    
     func testInitFileCache() throws {
         XCTAssertNotNil(cache)
         XCTAssertEqual(cache.cache.count, 0)

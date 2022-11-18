@@ -72,6 +72,19 @@ class FileCache: Cacheable {
 
 extension FileCache {
     
+    private func createDirectory(at path: URL, named: String) -> Result<URL, Error> {
+        let dir = path.appendingPathComponent(named)
+        if !FileManager.default.fileExists(atPath: dir.path) {
+            do {
+                try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                print("⚠️ error create directory: \(error.localizedDescription)")
+                return .failure(error)
+            }
+        }
+        return .success(dir)
+    }
+    
     private func getRootDir() -> URL? {
         var dir: URL
         do {
@@ -85,19 +98,6 @@ extension FileCache {
             return nil
         }
         return dir
-    }
-    
-    private func createDirectory(at path: URL, named: String) -> Result<URL, Error> {
-        let dir = path.appendingPathComponent(named)
-        if !FileManager.default.fileExists(atPath: dir.path) {
-            do {
-                try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                print("⚠️ error create directory: \(error.localizedDescription)")
-                return .failure(error)
-            }
-        }
-        return .success(dir)
     }
     
     private func getFiles() -> [URL] {
