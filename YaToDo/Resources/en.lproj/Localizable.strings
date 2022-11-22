@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  YaToDo
+
+  Created by Владимир on 22.11.2022.
+  
+*/
+
+
+// MARK: - TaskView
+
+"TaskView.Navigation.Title" = "Task";
+"TaskView.Navigation.CancelButton" = "Cancel";
+"TaskView.Navigation.SaveButton" = "Save";
+
+"TaskView.TextView.Placeholder" = "What needs to be done?";

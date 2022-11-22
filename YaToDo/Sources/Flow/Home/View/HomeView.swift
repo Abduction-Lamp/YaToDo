@@ -21,7 +21,7 @@ class HomeView: UIView {
         button.layer.cornerRadius = addTaskButtonSize.height/2
         button.layer.backgroundColor = UIColor.systemBlue.cgColor
         button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 1
+        button.layer.shadowOpacity = 0.5
         button.layer.shadowRadius = 3
         button.layer.shadowOffset = CGSize(width: 0, height: 3)
         return button

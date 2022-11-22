@@ -33,6 +33,7 @@ extension HomeViewController {
     
     @objc
     func addTaskButtonClicked(_ sender: UIButton) {
-        present(TaskViewController(), animated: true, completion: nil)
+        let navigation = UINavigationController(rootViewController: TaskViewController())
+        present(navigation, animated: true, completion: nil)
     }
 }

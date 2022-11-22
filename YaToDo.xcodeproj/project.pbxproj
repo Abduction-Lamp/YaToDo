@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E155800292D073E0069197B /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1557FF292D073E0069197B /* Design.swift */; };
+		4E155806292D17170069197B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4E155808292D17170069197B /* Localizable.strings */; };
 		4E21D6C12922620200B8A4DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6C02922620200B8A4DA /* AppDelegate.swift */; };
 		4E21D6C32922620200B8A4DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21D6C22922620200B8A4DA /* SceneDelegate.swift */; };
 		4E21D6CA2922620300B8A4DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E21D6C92922620300B8A4DA /* Assets.xcassets */; };
@@ -42,6 +44,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4E1557FF292D073E0069197B /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
+		4E155807292D17170069197B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4E15580A292D175E0069197B /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E21D6BD2922620200B8A4DA /* YaToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YaToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E21D6C02922620200B8A4DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4E21D6C22922620200B8A4DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +93,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E1557FE292D07030069197B /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				4E1557FF292D073E0069197B /* Design.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		4E21D6B42922620200B8A4DA = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +153,7 @@
 		4E21D6F029226A8400B8A4DA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				4E1557FE292D07030069197B /* Core */,
 				4E21D6FB2923E8D800B8A4DA /* Services */,
 				4E21D6F52923C26700B8A4DA /* Entities */,
 				4E8D10CA292BA12200323AD9 /* Flow */,
@@ -154,6 +168,7 @@
 			children = (
 				4E21D6C92922620300B8A4DA /* Assets.xcassets */,
 				4E21D6CB2922620300B8A4DA /* LaunchScreen.storyboard */,
+				4E155808292D17170069197B /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -343,6 +358,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 4E21D6B42922620200B8A4DA;
 			productRefGroup = 4E21D6BE2922620200B8A4DA /* Products */;
@@ -362,6 +378,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E21D6CD2922620300B8A4DA /* LaunchScreen.storyboard in Resources */,
+				4E155806292D17170069197B /* Localizable.strings in Resources */,
 				4E21D6CA2922620300B8A4DA /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,6 +413,7 @@
 				4E8D10CD292BA16F00323AD9 /* TaskViewController.swift in Sources */,
 				4E21D6C32922620200B8A4DA /* SceneDelegate.swift in Sources */,
 				4E21D6F92923C5DF00B8A4DA /* Priority.swift in Sources */,
+				4E155800292D073E0069197B /* Design.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +451,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		4E155808292D17170069197B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4E155807292D17170069197B /* en */,
+				4E15580A292D175E0069197B /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		4E21D6CB2922620300B8A4DA /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -448,6 +475,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -509,6 +537,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
