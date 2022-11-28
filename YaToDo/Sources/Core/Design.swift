@@ -10,11 +10,13 @@ import UIKit
 final class Design {
     typealias Padding = (small: CGFloat, medium: CGFloat, large: CGFloat)
     typealias Screen = (width: CGFloat, half: CGFloat, quarter: CGFloat)
+    typealias FontHeight = (small: CGFloat, system: CGFloat, label: CGFloat)
     
     
     let padding: Padding
     let screen: Screen
-
+    let fontHeight: FontHeight
+    let simpleСellHeight: CGFloat
     
     static let shared = Design()
     private init() {
@@ -22,5 +24,15 @@ final class Design {
         
         let width = UIScreen.main.bounds.size.width
         screen = (width: width, half: width/2, quarter: width/4)
+        
+        let smallSystemFont = UIFont.boldSystemFont(ofSize: UIFont.smallSystemFontSize)
+        let systemFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
+        let labelFont = UIFont.systemFont(ofSize: UIFont.labelFontSize)
+        
+        fontHeight = (small: smallSystemFont.lineHeight.rounded(.up),
+                      system: systemFont.lineHeight.rounded(.up),
+                      label: labelFont.lineHeight.rounded(.up))
+        
+        simpleСellHeight = fontHeight.small + fontHeight.label + padding.small + padding.small
     }
 }
