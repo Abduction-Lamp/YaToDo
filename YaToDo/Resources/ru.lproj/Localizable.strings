@@ -16,3 +16,4 @@
 "TaskView.TextView.Placeholder" = "Что надо сделать?";
 "TaskView.PriorityLabel" = "Приоритет";
 "TaskView.DeadlineLabel" = "Сделать до";
+"TaskView.RemoveButton" = "Удалить";

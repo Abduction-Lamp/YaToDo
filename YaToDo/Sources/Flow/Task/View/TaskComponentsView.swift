@@ -145,30 +145,30 @@ extension TaskComponentsView {
         NSLayoutConstraint.activate([
             priorityLabel.topAnchor.constraint(equalTo: topAnchor),
             priorityLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding.medium),
-            priorityLabel.trailingAnchor.constraint(equalTo: segment.leadingAnchor, constant: -padding.medium),
+            priorityLabel.trailingAnchor.constraint(equalTo: segment.leadingAnchor, constant: -padding.small),
             priorityLabel.heightAnchor.constraint(equalToConstant: heightСell),
             
-            segment.leadingAnchor.constraint(equalTo: centerXAnchor, constant: padding.small),
+            segment.leadingAnchor.constraint(equalTo: centerXAnchor),
             segment.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding.small),
             segment.centerYAnchor.constraint(equalTo: priorityLabel.centerYAnchor),
             segment.heightAnchor.constraint(equalToConstant: heightСell - 2 * padding.small),
 
             firstSeparator.topAnchor.constraint(equalTo: topAnchor, constant: heightСell),
-            firstSeparator.leadingAnchor.constraint(equalTo: leadingAnchor),
-            firstSeparator.trailingAnchor.constraint(equalTo: trailingAnchor),
+            firstSeparator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding.medium),
+            firstSeparator.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding.small),
             firstSeparator.heightAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale),
             
             toggle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding.small),
             toggle.centerYAnchor.constraint(equalTo: segment.centerYAnchor, constant: heightСell),
             
             deadlineStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding.medium),
-            deadlineStack.trailingAnchor.constraint(equalTo: toggle.leadingAnchor, constant: -padding.medium),
+            deadlineStack.trailingAnchor.constraint(equalTo: toggle.leadingAnchor, constant: -padding.small),
             deadlineStack.heightAnchor.constraint(equalToConstant: heightLabelFont + heightSmallFont),
             deadlineStack.centerYAnchor.constraint(equalTo: toggle.centerYAnchor),
             
             secondSeparator.topAnchor.constraint(equalTo: topAnchor, constant: heightСell * 2),
-            secondSeparator.leadingAnchor.constraint(equalTo: leadingAnchor),
-            secondSeparator.trailingAnchor.constraint(equalTo: trailingAnchor),
+            secondSeparator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding.medium),
+            secondSeparator.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding.small),
             secondSeparator.heightAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale)
         ])
     }

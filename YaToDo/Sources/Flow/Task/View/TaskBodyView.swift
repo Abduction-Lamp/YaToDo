@@ -31,7 +31,6 @@ class TaskBodyView: UIView {
         fatalError("📛 TaskBodyView init(coder:) has not been implemented")
     }
     
-
     private func configureUI() {
         clipsToBounds = true
         backgroundColor = .secondarySystemGroupedBackground
@@ -39,12 +38,12 @@ class TaskBodyView: UIView {
         
         addSubview(textView)
         
-        let padding = Design.shared.padding.small
+        let small = Design.shared.padding.small
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: topAnchor),
             textView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
-            textView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding)
+            textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: small),
+            textView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -small)
         ])
     }
 }

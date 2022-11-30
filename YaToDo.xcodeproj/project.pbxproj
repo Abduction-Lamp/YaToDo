@@ -100,8 +100,8 @@
 		4E0A5A6C292E2AD90042B31A /* View */ = {
 			isa = PBXGroup;
 			children = (
-				4E0A5A6E292E2B190042B31A /* TaskComponentsView.swift */,
 				4E0A5A70292E479D0042B31A /* TaskBodyView.swift */,
+				4E0A5A6E292E2B190042B31A /* TaskComponentsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
