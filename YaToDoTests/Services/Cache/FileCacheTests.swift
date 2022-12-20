@@ -35,7 +35,7 @@ extension FileCacheTests {
     func testCacheable() throws {
         let item1 = ToDoItem(text: "item 1")
         let item2 = ToDoItem(text: "item 2", priority: .high, deadline: Date())
-        let item3 = ToDoItem(id: "item 3", text: "item 3", priority: .low, date: Date(), deadline: Date())
+        let item3 = ToDoItem(id: "item 3", text: "item 3", priority: .low, date: Date(), deadline: Date(), completed: Date())
         
         // MARK: Добовление в кэш
         cache.add(item1)
@@ -62,6 +62,7 @@ extension FileCacheTests {
                 XCTAssertEqual(item.priority,   item1.priority)
                 XCTAssertEqual(item.date,       item1.date)
                 XCTAssertEqual(item.deadline,   item1.deadline)
+                XCTAssertEqual(item.completed,  item1.completed)
             }
             
             if index == 1 {
@@ -71,6 +72,7 @@ extension FileCacheTests {
                 XCTAssertEqual(item.priority,   item2.priority)
                 XCTAssertEqual(item.date,       item2.date)
                 XCTAssertEqual(item.deadline,   item2.deadline)
+                XCTAssertEqual(item.completed,  item2.completed)
             }
             
             if index == 2 {
@@ -80,6 +82,7 @@ extension FileCacheTests {
                 XCTAssertEqual(item.priority,   item3.priority)
                 XCTAssertEqual(item.date,       item3.date)
                 XCTAssertEqual(item.deadline,   item3.deadline)
+                XCTAssertEqual(item.completed,  item3.completed)
             }
         }
         
@@ -91,6 +94,7 @@ extension FileCacheTests {
         XCTAssertEqual(deleted?.priority,   item3.priority)
         XCTAssertEqual(deleted?.date,       item3.date)
         XCTAssertEqual(deleted?.deadline,   item3.deadline)
+        XCTAssertEqual(deleted?.completed,  item3.completed)
         XCTAssertEqual(cache.cache.count, 2)
 
         cache.add(item3)
@@ -104,7 +108,7 @@ extension FileCacheTests {
     func testFileCacheFetchData() throws {
         let item1 = ToDoItem(text: "item 1")
         let item2 = ToDoItem(text: "item 2", priority: .high, deadline: Date())
-        let item3 = ToDoItem(id: "item 3", text: "item 3", priority: .low, date: Date(), deadline: Date())
+        let item3 = ToDoItem(id: "item 3", text: "item 3", priority: .low, date: Date(), deadline: Date(), completed: Date())
         
         // MARK: Добовление в кэш
         cache.add(item1)

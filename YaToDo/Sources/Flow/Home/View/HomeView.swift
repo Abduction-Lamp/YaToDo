@@ -9,8 +9,18 @@ import UIKit
 
 class HomeView: UIView {
     
-    private let addTaskButtonSize = CGSize(width: 56, height: 56)
+    private(set) var table: UITableView = {
+        let table = UITableView(frame: .zero, style: .insetGrouped)
+        table.translatesAutoresizingMaskIntoConstraints = false
+        table.separatorStyle = .singleLine
+        
+        table.register(TaskListHeader.self, forHeaderFooterViewReuseIdentifier: TaskListHeader.reuseIdentifier)
+        table.register(UITableViewCell.self, forCellReuseIdentifier: "\(UITableViewCell.self)")
+        
+        return table
+    }()
     
+    private let addTaskButtonSize = CGSize(width: 56, height: 56)
     lazy private(set) var addTaskButton: UIButton = {
         let image = UIImage(systemName: "plus")
         let button = UIButton()
@@ -22,7 +32,7 @@ class HomeView: UIView {
         button.layer.backgroundColor = UIColor.systemBlue.cgColor
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOpacity = 0.5
-        button.layer.shadowRadius = 3
+        button.layer.shadowRadius = 5
         button.layer.shadowOffset = CGSize(width: 0, height: 3)
         return button
     }()
@@ -39,7 +49,8 @@ class HomeView: UIView {
     }
     
     private func buildUI() {
-        backgroundColor = .white
+        backgroundColor = .systemGroupedBackground
+        addSubview(table)
         addSubview(addTaskButton)
         
         configureConstraints()
@@ -47,6 +58,11 @@ class HomeView: UIView {
     
     private func configureConstraints() {
         NSLayoutConstraint.activate([
+            table.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            table.leadingAnchor.constraint(equalTo: leadingAnchor),
+            table.trailingAnchor.constraint(equalTo: trailingAnchor),
+            table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            
             addTaskButton.widthAnchor.constraint(equalToConstant: addTaskButtonSize.width),
             addTaskButton.heightAnchor.constraint(equalToConstant: addTaskButtonSize.height),
             addTaskButton.centerXAnchor.constraint(equalTo: centerXAnchor),

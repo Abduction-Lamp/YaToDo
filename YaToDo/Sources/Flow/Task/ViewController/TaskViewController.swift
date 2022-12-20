@@ -108,7 +108,8 @@ extension TaskViewController {
         conponents.calendar.addTarget(self, action: #selector(selectedDate(_:)), for: .valueChanged)
         removeButton.addTarget(self, action: #selector(removeButtonClicked(_:)), for: .touchUpInside)
         
-        keyboardHideTapGesture.addTarget(self, action: #selector(keyboardHide))
+        keyboardHideTapGesture.addTarget(self, action: #selector(keyboardHide(_:)))
+        keyboardHideTapGesture.delegate = self
         scrollView.addGestureRecognizer(keyboardHideTapGesture)
     }
     
@@ -171,9 +172,9 @@ extension TaskViewController {
         scrollView.contentInset = .zero
         scrollView.scrollIndicatorInsets = .zero
     }
-    
+
     @objc
-    private func keyboardHide(_ sender: Any?) {
+    private func keyboardHide(_ sender: UITapGestureRecognizer) {
         scrollView.endEditing(true)
     }
 
@@ -251,6 +252,19 @@ extension TaskViewController: UITextViewDelegate {
                     scrollView.contentSize = self.contentSize
                 }
             }
+        }
+    }
+}
+
+
+extension TaskViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if touch.view?.isDescendant(of: conponents.calendar) == true {
+            conponents.calendar.sendActions(for: .valueChanged)
+            return false
+        } else {
+            return true
         }
     }
 }

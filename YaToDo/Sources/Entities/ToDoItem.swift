@@ -33,18 +33,21 @@ struct ToDoItem {
     let priority: Priority
     let date: Date
     let deadline: Date?
+    let completed: Date?
 
     init(id: String = UUID.init().uuidString,
          text: String,
          priority: Priority = .normal,
-         date: Date? = nil,
-         deadline: Date? = nil
+         date: Date = Date(),
+         deadline: Date? = nil,
+         completed: Date? = nil
     ) {
-        self.date = date ?? Date()
+        self.date = date
         self.id = id
         self.text = text
         self.priority = priority
         self.deadline = deadline
+        self.completed = completed
     }
 }
 
@@ -69,7 +72,17 @@ extension ToDoItem {
             deadline = Date(timeIntervalSince1970: timeDeadline)
         }
         
-        return ToDoItem(id: id, text: text, priority: priority, date: Date(timeIntervalSince1970: date), deadline: deadline)
+        var completed: Date?
+        if let dateCompleted = jsonObj["completed"] as? TimeInterval {
+            completed = Date(timeIntervalSince1970: dateCompleted)
+        }
+        
+        return ToDoItem(id: id,
+                        text: text,
+                        priority: priority,
+                        date: Date(timeIntervalSince1970: date),
+                        deadline: deadline,
+                        completed: completed)
     }
     
     var json: Any {
@@ -78,6 +91,7 @@ extension ToDoItem {
         jsonObj["text"] = text
         jsonObj["date"] = date.timeIntervalSince1970
         jsonObj["deadline"] = deadline?.timeIntervalSince1970
+        jsonObj["completed"] = completed?.timeIntervalSince1970
         if priority != .normal {
             jsonObj["priority"] = priority.rawValue
         }

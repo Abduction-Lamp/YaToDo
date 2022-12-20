@@ -6,6 +6,18 @@
   
 */
 
+// MARK: - General
+
+"General.Lang" = "ru";
+"General.Locale.Identifier" = "ru_RU";
+
+
+// MARK: - HomeView
+
+"HomeView.Navigation.Title" = "Мои дела";
+
+"HomeView.TaskList.Header" = "Завершенные ";
+
 
 // MARK: - TaskView
 

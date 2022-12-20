@@ -6,6 +6,20 @@
   
 */
 
+// MARK: - General
+
+"General.Lang" = "en";
+"General.Locale.Identifier" = "en-US";
+
+
+// MARK: - HomeView
+
+"HomeView.Navigation.Title" = "My tasks";
+
+"HomeView.TaskList.Header" = "Completed ";
+
+
+
 
 // MARK: - TaskView
 

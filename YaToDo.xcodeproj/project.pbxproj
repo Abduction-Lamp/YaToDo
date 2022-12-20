@@ -26,6 +26,8 @@
 		4E8D10CD292BA16F00323AD9 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8D10CC292BA16F00323AD9 /* TaskViewController.swift */; };
 		4E8D10D0292BA22200323AD9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8D10CF292BA22200323AD9 /* HomeViewController.swift */; };
 		4E8D10D4292BA2A600323AD9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8D10D3292BA2A600323AD9 /* HomeView.swift */; };
+		4EAE1E182940D9A50092A206 /* TaskListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAE1E172940D9A50092A206 /* TaskListHeader.swift */; };
+		4EF6CDBA2948B72600BA9DF1 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6CDB92948B72600BA9DF1 /* Date.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,8 @@
 		4E8D10CC292BA16F00323AD9 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		4E8D10CF292BA22200323AD9 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		4E8D10D3292BA2A600323AD9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		4EAE1E172940D9A50092A206 /* TaskListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListHeader.swift; sourceTree = "<group>"; };
+		4EF6CDB92948B72600BA9DF1 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,7 @@
 		4E1557FE292D07030069197B /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				4EF6CDB82948B70800BA9DF1 /* Extentions */,
 				4E1557FF292D073E0069197B /* Design.swift */,
 			);
 			path = Core;
@@ -282,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				4E8D10D3292BA2A600323AD9 /* HomeView.swift */,
+				4EAE1E172940D9A50092A206 /* TaskListHeader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -292,6 +298,14 @@
 				4E8D10CF292BA22200323AD9 /* HomeViewController.swift */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		4EF6CDB82948B70800BA9DF1 /* Extentions */ = {
+			isa = PBXGroup;
+			children = (
+				4EF6CDB92948B72600BA9DF1 /* Date.swift */,
+			);
+			path = Extentions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -430,8 +444,10 @@
 				4E21D6F429226B5500B8A4DA /* AppKeys.swift in Sources */,
 				4E21D6FE2923E92300B8A4DA /* FileCache.swift in Sources */,
 				4E21D6F72923C28E00B8A4DA /* ToDoItem.swift in Sources */,
+				4EAE1E182940D9A50092A206 /* TaskListHeader.swift in Sources */,
 				4E8D10D0292BA22200323AD9 /* HomeViewController.swift in Sources */,
 				4E21D6C12922620200B8A4DA /* AppDelegate.swift in Sources */,
+				4EF6CDBA2948B72600BA9DF1 /* Date.swift in Sources */,
 				4E0A5A6F292E2B190042B31A /* TaskComponentsView.swift in Sources */,
 				4E8D10CD292BA16F00323AD9 /* TaskViewController.swift in Sources */,
 				4E21D6C32922620200B8A4DA /* SceneDelegate.swift in Sources */,
