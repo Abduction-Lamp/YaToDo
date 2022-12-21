@@ -59,8 +59,6 @@ extension HomeViewController {
     @objc
     func addTaskButtonClicked(_ sender: UIButton) {
         let navigation = UINavigationController(rootViewController: TaskViewController())
-//        navigation.modalTransitionStyle = .coverVertical
-//        navigation.modalPresentationStyle = .overFullScreen
         present(navigation, animated: true, completion: nil)
     }
 }
