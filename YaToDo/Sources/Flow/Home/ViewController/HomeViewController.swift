@@ -17,6 +17,7 @@ class HomeViewController: UIViewController {
     }
     
     
+    
     var model: [ToDoItem] = [
         ToDoItem(text: "Купить вино", priority: .low, deadline: Date() + 30000),
         ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 30000),
@@ -100,8 +101,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-
-        let checkAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
+        
+        let checkSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
             if let item = self?.model[indexPath.row] {
                 let completedDate: Date? = (item.completed == nil) ? Date() : nil
                 self?.model[indexPath.row] = ToDoItem(id: item.id,
@@ -110,16 +111,40 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
                                                       date: item.date,
                                                       deadline: item.deadline,
                                                       completed: completedDate)
-//            let cell = tableView.cellForRow(at: indexPath)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             }
             completionHandler(true)
         }
+        if model[indexPath.row].completed == nil {
+            checkSwipeAction.backgroundColor = .systemGreen
+            checkSwipeAction.image = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(.white)
+        } else {
+            checkSwipeAction.backgroundColor = .placeholderText
+            checkSwipeAction.image = UIImage(systemName: "circle")?.withTintColor(.white)
+        }
+        return  UISwipeActionsConfiguration(actions: [checkSwipeAction])
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        checkAction.backgroundColor = .systemGreen
-        checkAction.image = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(.white)
+        let infoSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
+            let navigation = UINavigationController(rootViewController: TaskViewController())
+            self?.present(navigation, animated: true, completion: nil)
+        }
+        infoSwipeAction.backgroundColor = .placeholderText
+        infoSwipeAction.image = UIImage(systemName: "info.circle.fill")?.withTintColor(.white)
+        
+        let deleteSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
+            self?.deletionWarningAlert(title: "Удалить задачу?", message: self?.model[indexPath.row].text) { _ in
+                    self?.model.remove(at: indexPath.row)
+                    tableView.reloadData()
+                }
+            completionHandler(true)
+        }
+        deleteSwipeAction.backgroundColor = .systemRed
+        deleteSwipeAction.image = UIImage(systemName: "trash")?.withTintColor(.white)
 
-        return  UISwipeActionsConfiguration(actions: [checkAction])
+        return  UISwipeActionsConfiguration(actions: [deleteSwipeAction, infoSwipeAction])
     }
 }
  
@@ -137,10 +162,10 @@ extension HomeViewController {
         configuration.textProperties.numberOfLines = 3
         configuration.textToSecondaryTextVerticalPadding = padding.small
         
-        configuration.secondaryAttributedText = getDeadlineAttributedText(for: item)
-        configuration.secondaryTextProperties.numberOfLines = 1
-        
         if item.completed == nil {
+            configuration.secondaryAttributedText = getDeadlineAttributedText(for: item)
+            configuration.secondaryTextProperties.numberOfLines = 1
+            
             configuration.image = UIImage(systemName: "circle")
             if item.priority == .high {
                 configuration.imageProperties.tintColor = .systemRed
@@ -191,5 +216,15 @@ extension HomeViewController {
         completeText.append(text)
         
         return completeText
+    }
+    
+    
+    private func deletionWarningAlert(title: String?, message: String?, handler: ((UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        let cancelTitle = "Отмена" //NSLocalizedString("CartView.Alert.CancelButton.Title", comment: "")
+        let deleteTitle = "Удалить" //NSLocalizedString("CartView.Alert.DeleteButton.Title", comment: "")
+        alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel) { _ in })
+        alert.addAction(UIAlertAction(title: deleteTitle, style: .destructive, handler: handler))
+        self.present(alert, animated: true, completion: nil)
     }
 }
