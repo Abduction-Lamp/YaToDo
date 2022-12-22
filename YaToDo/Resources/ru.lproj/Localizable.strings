@@ -11,6 +11,10 @@
 "General.Lang" = "ru";
 "General.Locale.Identifier" = "ru_RU";
 
+"General.Alert.Titel.DeleteTask" = "Удалить задачу?";
+"General.Alert.Cancel" = "Отменить";
+"General.Alert.Delete" = "Удалить";
+
 
 // MARK: - HomeView
 

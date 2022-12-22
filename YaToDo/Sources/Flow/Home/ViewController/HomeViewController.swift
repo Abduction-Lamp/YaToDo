@@ -23,7 +23,12 @@ class HomeViewController: UIViewController {
         ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 30000),
         ToDoItem(text: "2", completed: Date()),
         ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 30000, completed: Date()),
-        ToDoItem(text: "5066-553 22", priority: .high)
+        ToDoItem(text: "5066-553 22", priority: .high),
+        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 31000),
+        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 100000, completed: Date()),
+        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 3000, completed: Date()),
+        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 130000, completed: Date()),
+        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", priority: .high, deadline: Date() + 230000)
     ]
     
     
@@ -51,16 +56,6 @@ class HomeViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         navigationController?.navigationBar.prefersLargeTitles = false
-    }
-}
-
-
-extension HomeViewController {
-    
-    @objc
-    func addTaskButtonClicked(_ sender: UIButton) {
-        let navigation = UINavigationController(rootViewController: TaskViewController())
-        present(navigation, animated: true, completion: nil)
     }
 }
 
@@ -99,18 +94,17 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         return nil
     }
     
-    
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let checkSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
             if let item = self?.model[indexPath.row] {
-                let completedDate: Date? = (item.completed == nil) ? Date() : nil
-                self?.model[indexPath.row] = ToDoItem(id: item.id,
-                                                      text: item.text,
-                                                      priority: item.priority,
-                                                      date: item.date,
-                                                      deadline: item.deadline,
-                                                      completed: completedDate)
+                let new = ToDoItem(id: item.id,
+                                   text: item.text,
+                                   priority: item.priority,
+                                   date: item.date,
+                                   deadline: item.deadline,
+                                   completed: (item.completed == nil) ? Date() : nil)
+                self?.model[indexPath.row] = new
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             }
             completionHandler(true)
@@ -135,10 +129,10 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         infoSwipeAction.image = UIImage(systemName: "info.circle.fill")?.withTintColor(.white)
         
         let deleteSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
-            self?.deletionWarningAlert(title: "Удалить задачу?", message: self?.model[indexPath.row].text) { _ in
-                    self?.model.remove(at: indexPath.row)
-                    tableView.reloadData()
-                }
+            self?.deletionWarningAlert(message: self?.model[indexPath.row].text) { _ in
+                self?.model.remove(at: indexPath.row)
+                tableView.reloadData()
+            }
             completionHandler(true)
         }
         deleteSwipeAction.backgroundColor = .systemRed
@@ -219,12 +213,24 @@ extension HomeViewController {
     }
     
     
-    private func deletionWarningAlert(title: String?, message: String?, handler: ((UIAlertAction) -> Void)?) {
+    private func deletionWarningAlert(message: String?, handler: ((UIAlertAction) -> Void)?) {
+        let title = NSLocalizedString("General.Alert.Titel.DeleteTask", comment: "Titel")
+        let cancel = NSLocalizedString("General.Alert.Cancel", comment: "Cancel")
+        let delete = NSLocalizedString("General.Alert.Delete", comment: "Delete")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
-        let cancelTitle = "Отмена" //NSLocalizedString("CartView.Alert.CancelButton.Title", comment: "")
-        let deleteTitle = "Удалить" //NSLocalizedString("CartView.Alert.DeleteButton.Title", comment: "")
-        alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel) { _ in })
-        alert.addAction(UIAlertAction(title: deleteTitle, style: .destructive, handler: handler))
+       
+        alert.addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: delete, style: .destructive, handler: handler))
         self.present(alert, animated: true, completion: nil)
+    }
+}
+
+
+extension HomeViewController {
+    
+    @objc
+    func addTaskButtonClicked(_ sender: UIButton) {
+        let navigation = UINavigationController(rootViewController: TaskViewController())
+        present(navigation, animated: true, completion: nil)
     }
 }

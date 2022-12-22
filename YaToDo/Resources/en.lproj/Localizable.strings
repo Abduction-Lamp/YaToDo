@@ -11,14 +11,16 @@
 "General.Lang" = "en";
 "General.Locale.Identifier" = "en-US";
 
+"General.Alert.Titel.DeleteTask" = "Delete task?";
+"General.Alert.Cancel" = "Cancel";
+"General.Alert.Delete" = "Delete";
+
 
 // MARK: - HomeView
 
 "HomeView.Navigation.Title" = "My tasks";
 
 "HomeView.TaskList.Header" = "Completed ";
-
-
 
 
 // MARK: - TaskView
