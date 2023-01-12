@@ -26,6 +26,7 @@
 		4E8D10CD292BA16F00323AD9 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8D10CC292BA16F00323AD9 /* TaskViewController.swift */; };
 		4E8D10D0292BA22200323AD9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8D10CF292BA22200323AD9 /* HomeViewController.swift */; };
 		4E8D10D4292BA2A600323AD9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8D10D3292BA2A600323AD9 /* HomeView.swift */; };
+		4E9E6DC22970339200A53F25 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9E6DC12970339200A53F25 /* AsyncOperation.swift */; };
 		4EAE1E182940D9A50092A206 /* TaskListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAE1E172940D9A50092A206 /* TaskListHeader.swift */; };
 		4EF6CDBA2948B72600BA9DF1 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6CDB92948B72600BA9DF1 /* Date.swift */; };
 /* End PBXBuildFile section */
@@ -72,6 +73,7 @@
 		4E8D10CC292BA16F00323AD9 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		4E8D10CF292BA22200323AD9 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		4E8D10D3292BA2A600323AD9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		4E9E6DC12970339200A53F25 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		4EAE1E172940D9A50092A206 /* TaskListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListHeader.swift; sourceTree = "<group>"; };
 		4EF6CDB92948B72600BA9DF1 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +125,7 @@
 			children = (
 				4EF6CDB82948B70800BA9DF1 /* Extentions */,
 				4E1557FF292D073E0069197B /* Design.swift */,
+				4E9E6DC12970339200A53F25 /* AsyncOperation.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -453,6 +456,7 @@
 				4E21D6C32922620200B8A4DA /* SceneDelegate.swift in Sources */,
 				4E0A5A71292E479D0042B31A /* TaskBodyView.swift in Sources */,
 				4E21D6F92923C5DF00B8A4DA /* Priority.swift in Sources */,
+				4E9E6DC22970339200A53F25 /* AsyncOperation.swift in Sources */,
 				4E155800292D073E0069197B /* Design.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
