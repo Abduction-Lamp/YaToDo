@@ -58,7 +58,32 @@ protocol Cacheable {
     func removeAll() -> Bool
 }
 
-class FileCache: Cacheable {
+enum FileCacheError: Error, CustomStringConvertible {
+    case createDirectory(Error)
+    case getDirectory(Error)
+    case getFiles(Error)
+    case readFile(Error)
+    case writeFile(Error)
+    case removeFile(Error)
+    case removeAllFile(Error)
+    
+    var description: String {
+        var mesage = "⚠️ "
+        switch self {
+        case let .createDirectory(error):  mesage += "error create directory: \(error.localizedDescription)"
+        case let .getDirectory(error):     mesage += "error get directory: \(error.localizedDescription)"
+        case let .getFiles(error):         mesage += "error get files: \(error.localizedDescription)"
+        case let .readFile(error):         mesage += "error read file: \(error.localizedDescription)"
+        case let .writeFile(error):        mesage += "error write file: \(error.localizedDescription)"
+        case let .removeFile(error):       mesage += "error remove file: \(error.localizedDescription)"
+        case let .removeAllFile(error):    mesage += "error remove all files: \(error.localizedDescription)"
+        }
+        return mesage
+    }
+}
+
+
+final class FileCache: Cacheable {
     
     private var root: URL? = nil
     private(set) var cache: [ToDoItem] = []
@@ -99,14 +124,15 @@ class FileCache: Cacheable {
 
 extension FileCache {
     
-    private func createDirectory(at path: URL, named: String) -> Result<URL, Error> {
+    private func createDirectory(at path: URL, named: String) -> Result<URL, FileCacheError> {
         let dir = path.appendingPathComponent(named)
         if !FileManager.default.fileExists(atPath: dir.path) {
             do {
                 try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                print("⚠️ error create directory: \(error.localizedDescription)")
-                return .failure(error)
+                let err: FileCacheError = .createDirectory(error)
+                print(err)
+                return .failure(err)
             }
         }
         return .success(dir)
@@ -121,7 +147,7 @@ extension FileCache {
             case let .failure(error): throw error
             }
         } catch {
-            print("⚠️ error get directory: \(error.localizedDescription)")
+            print(FileCacheError.getDirectory(error))
             return nil
         }
         return dir
@@ -136,7 +162,7 @@ extension FileCache {
                                                                        includingPropertiesForKeys: nil,
                                                                        options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])
             } catch {
-                print("⚠️ error get files: \(error.localizedDescription)")
+                print(FileCacheError.getFiles(error))
             }
         }
         return contents
@@ -156,7 +182,7 @@ extension FileCache {
                     cache.append(item)
                 }
             } catch {
-                print("⚠️ error read file: \(error.localizedDescription)")
+                print(FileCacheError.readFile(error))
                 continue
             }
         }
@@ -171,7 +197,7 @@ extension FileCache {
                 let data = try JSONSerialization.data(withJSONObject: item.json, options: [])
                 result = FileManager.default.createFile(atPath: dir.path, contents: data, attributes: nil)
             } catch {
-                print("⚠️ error write file: \(error.localizedDescription)")
+                print(FileCacheError.writeFile(error))
             }
         }
         return result
@@ -186,7 +212,7 @@ extension FileCache {
                 try FileManager.default.removeItem(at: dir)
                 result = true
             } catch {
-                print("⚠️ error remove file: \(error.localizedDescription)")
+                print(FileCacheError.removeFile(error))
             }
         }
         return result
@@ -201,7 +227,7 @@ extension FileCache {
                 root = getRootDir()
                 result = (root != nil)
             } catch {
-                print("⚠️ error remove all files: \(error.localizedDescription)")
+                print(FileCacheError.removeAllFile(error))
             }
         }
         return result
