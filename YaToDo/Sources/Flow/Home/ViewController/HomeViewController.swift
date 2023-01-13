@@ -16,20 +16,7 @@ class HomeViewController: UIViewController {
         return view
     }
     
-    
-    
-    var model: [ToDoItem] = [
-        ToDoItem(text: "Купить вино", priority: .low, deadline: Date() + 30000),
-        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 30000),
-        ToDoItem(text: "2", completed: Date()),
-        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 30000, completed: Date()),
-        ToDoItem(text: "5066-553 22", priority: .high),
-        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 31000),
-        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 100000, completed: Date()),
-        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 3000, completed: Date()),
-        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", deadline: Date() + 130000, completed: Date()),
-        ToDoItem(text: "Купить вино Купить вин о Купить вино Купить вино Купить вино UITableViewHeaderFooterView is not supported. Use the background view configuration instead.", priority: .high, deadline: Date() + 230000)
-    ]
+    var model = FileCache()
     
     
     override func loadView() {
@@ -67,15 +54,15 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        model.count
+        model.cache.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard indexPath.row < model.count,
+        guard indexPath.row < model.cache.count,
               let cell = tableView.dequeueReusableCell(withIdentifier: "\(UITableViewCell.self)")
         else { return UITableViewCell() }
         cell.accessoryType = .disclosureIndicator
-        cell.contentConfiguration = makeContentConfiguration(for: model[indexPath.row])
+        cell.contentConfiguration = makeContentConfiguration(for: model.cache[indexPath.row])
         return cell
     }
     
@@ -97,19 +84,20 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let checkSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
-            if let item = self?.model[indexPath.row] {
+            if let item = self?.model.cache[indexPath.row] {
                 let new = ToDoItem(id: item.id,
                                    text: item.text,
                                    priority: item.priority,
                                    date: item.date,
                                    deadline: item.deadline,
                                    completed: (item.completed == nil) ? Date() : nil)
-                self?.model[indexPath.row] = new
-                tableView.reloadRows(at: [indexPath], with: .automatic)
+                if self?.model.change(id: item.id, new: new) != nil {
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
             }
             completionHandler(true)
         }
-        if model[indexPath.row].completed == nil {
+        if model.cache[indexPath.row].completed == nil {
             checkSwipeAction.backgroundColor = .systemGreen
             checkSwipeAction.image = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(.white)
         } else {
@@ -129,9 +117,10 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         infoSwipeAction.image = UIImage(systemName: "info.circle.fill")?.withTintColor(.white)
         
         let deleteSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
-            self?.deletionWarningAlert(message: self?.model[indexPath.row].text) { _ in
-                self?.model.remove(at: indexPath.row)
-                tableView.reloadData()
+            self?.deletionWarningAlert(message: self?.model.cache[indexPath.row].text) { _ in
+                if self?.model.remove(id: self!.model.cache[indexPath.row].id) != nil {
+                    tableView.reloadData()
+                }
             }
             completionHandler(true)
         }

@@ -114,3 +114,19 @@ extension ToDoItem: Hashable {
         hasher.combine(id)
     }
 }
+
+
+extension ToDoItem: CustomStringConvertible {
+    
+    var description: String {
+        return  """
+                id:\t\t\t\(id)
+                text:\t\t\(text)
+                priority:\t\(priority)
+                date:\t\t\(date)
+                deadline:\t\(deadline?.description ?? "-")
+                completed:\t\(completed == nil ? "No" : "YES")
+                
+                """
+    }
+}

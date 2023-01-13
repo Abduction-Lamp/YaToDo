@@ -1,27 +1,8 @@
 //
-//  FileCache.swift
+//  FileCacheOperation.swift
 //  YaToDo
 //
-//  Created by Владимир on 15.11.2022.
-//
-//
-//
-//  Яндекс Академия
-//  Школа мобильной разработки 2021: iOS
-//
-//  02. Swift как язык программирования
-//  https://www.youtube.com/watch?v=ik3Jw-GCzUY
-//
-//  3.    Реализовать класс FileCache
-//      - Содержит закрытую для внешнего изменения, но открытую для получения коллекции TodoItem
-//      - Содержит функцию добовления новой задачи
-//      - Содержит функцию удаления задачи (на основе id)
-//      - Содержит функцию загрузки всех дел из файла
-//      - Может иметь несколько разных файлов
-//
-//  4.    Реализовать сохранение и загрузку FileCache в файл и из файла
-//
-//
+//  Created by Vladimir Lesnykh on 13.01.2023.
 //
 //  Яндекс Академия
 //  Школа мобильной разработки 2021: iOS
@@ -50,40 +31,7 @@
 
 import Foundation
 
-protocol Cacheable {
-    var cache: [ToDoItem] { get }
-    
-    func add(_ item: ToDoItem)
-    func remove(id: String) -> ToDoItem?
-    func removeAll() -> Bool
-}
-
-enum FileCacheError: Error, CustomStringConvertible {
-    case createDirectory(Error)
-    case getDirectory(Error)
-    case getFiles(Error)
-    case readFile(Error)
-    case writeFile(Error)
-    case removeFile(Error)
-    case removeAllFile(Error)
-    
-    var description: String {
-        var mesage = "⚠️ "
-        switch self {
-        case let .createDirectory(error):  mesage += "error create directory: \(error.localizedDescription)"
-        case let .getDirectory(error):     mesage += "error get directory: \(error.localizedDescription)"
-        case let .getFiles(error):         mesage += "error get files: \(error.localizedDescription)"
-        case let .readFile(error):         mesage += "error read file: \(error.localizedDescription)"
-        case let .writeFile(error):        mesage += "error write file: \(error.localizedDescription)"
-        case let .removeFile(error):       mesage += "error remove file: \(error.localizedDescription)"
-        case let .removeAllFile(error):    mesage += "error remove all files: \(error.localizedDescription)"
-        }
-        return mesage
-    }
-}
-
-
-final class FileCache: Cacheable {
+final class FileCacheOperation: Cacheable {
     
     private var root: URL? = nil
     private(set) var cache: [ToDoItem] = []
@@ -100,16 +48,6 @@ final class FileCache: Cacheable {
             cache.append(item)
             let _ = write(item)
         }
-    }
-    
-    func change(id: String, new item: ToDoItem) -> ToDoItem? {
-        if let index = cache.firstIndex(where: { $0.id == id }) {
-            let old = cache[index]
-            cache[index] = item
-            let _ = write(item)
-            return old
-        }
-        return nil
     }
     
     func remove(id: String) -> ToDoItem? {
@@ -132,7 +70,7 @@ final class FileCache: Cacheable {
 }
 
 
-extension FileCache {
+extension FileCacheOperation {
     
     private func createDirectory(at path: URL, named: String) -> Result<URL, FileCacheError> {
         let dir = path.appendingPathComponent(named)
@@ -196,7 +134,6 @@ extension FileCache {
                 continue
             }
         }
-        cache.sort { $0.date < $1.date }
     }
     
     private func write(_ item: ToDoItem) -> Bool {

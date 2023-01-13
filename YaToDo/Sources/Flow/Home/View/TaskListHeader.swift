@@ -59,10 +59,10 @@ extension TaskListHeader {
         contentView.addSubview(label)
         contentView.addSubview(button)
         
-        configureUI()
+        configureConstraints()
     }
     
-    private func configureUI() {
+    private func configureConstraints() {
         let padding = Design.shared.padding
         
         NSLayoutConstraint.activate([

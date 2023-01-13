@@ -24,20 +24,28 @@ class TaskBodyView: UIView {
     // MARK: Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureUI()
+        buildUI()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("📛 TaskBodyView init(coder:) has not been implemented")
     }
+}
+
+
+extension TaskBodyView {
     
-    private func configureUI() {
+    private func buildUI() {
         clipsToBounds = true
         backgroundColor = .secondarySystemGroupedBackground
         layer.cornerRadius = 10
         
         addSubview(textView)
         
+        configureConstraints()
+    }
+    
+    private func configureConstraints() {
         let small = Design.shared.padding.small
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: topAnchor),

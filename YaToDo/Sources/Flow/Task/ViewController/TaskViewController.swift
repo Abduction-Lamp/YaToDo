@@ -185,7 +185,34 @@ extension TaskViewController {
 
     @objc
     func saveButtonClicked(_ sender: UIBarButtonItem) {
-        Swift.debugPrint("saveButtonClicked")
+        let cache = FileCache()
+        
+        let text = body.textView.text
+        
+        var priority: Priority = .normal
+        switch conponents.segment.selectedSegmentIndex {
+        case 0: priority = .low
+        case 2: priority = .high
+        default: break
+        }
+        
+        var deadline: Date?
+        if conponents.toggle.isOn {
+            deadline = conponents.calendar.date
+        }
+        
+        let item = ToDoItem(text: text ?? "", priority: priority, deadline: deadline)
+        
+        cache.add(item)
+        Swift.debugPrint(item)
+        Swift.debugPrint("--- === \(cache.cache.count) === ---")
+        for task in cache.cache {
+            Swift.debugPrint(task)
+        }
+        
+        
+        // TODO: Показать анимацию о сохранении
+        dismiss(animated: true, completion: nil)
     }
     
     @objc

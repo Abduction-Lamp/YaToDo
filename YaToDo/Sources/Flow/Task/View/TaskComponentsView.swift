@@ -18,7 +18,7 @@ class TaskComponentsView: UIView {
         return label
     }()
     
-    private var segment: UISegmentedControl = {
+    private(set) var segment: UISegmentedControl = {
         let selectedTextAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor.systemRed,
             NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: UIFont.labelFontSize)
