@@ -32,7 +32,7 @@
 import Foundation
 
 final class FileCacheOperation: Cacheable {
-    
+
     private var root: URL? = nil
     private(set) var cache: [ToDoItem] = []
     
@@ -50,6 +50,10 @@ final class FileCacheOperation: Cacheable {
         }
     }
     
+    func change(id: String, new item: ToDoItem) -> ToDoItem? {
+        return nil
+    }
+     
     func remove(id: String) -> ToDoItem? {
         if let index = cache.firstIndex(where: { $0.id == id }) {
             let item = cache.remove(at: index)

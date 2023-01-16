@@ -16,7 +16,7 @@ class HomeViewController: UIViewController {
         return view
     }
     
-    var model = FileCache()
+    var presenter: HomePresenterProtocol?
     
     
     override func loadView() {
@@ -46,23 +46,36 @@ class HomeViewController: UIViewController {
     }
 }
 
+extension HomeViewController: HomeViewControllerProtocol {
+    
+    func update() {
+        homeView.table.reloadData()
+    }
+    
+    func update(index: Int) {
+        homeView.table.reloadData()
+    }
+}
+
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        guard let presenter = presenter else { return 1 }
+        return presenter.numberOfSections()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        model.cache.count
+        guard let presenter = presenter else { return 0 }
+        return presenter.numberOfRowsInSection()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard indexPath.row < model.cache.count,
+        guard let item = presenter?.getTaskItem(forRowAt: indexPath),
               let cell = tableView.dequeueReusableCell(withIdentifier: "\(UITableViewCell.self)")
         else { return UITableViewCell() }
         cell.accessoryType = .disclosureIndicator
-        cell.contentConfiguration = makeContentConfiguration(for: model.cache[indexPath.row])
+        cell.contentConfiguration = makeContentConfiguration(for: item)
         return cell
     }
     
@@ -75,6 +88,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             guard
                 let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TaskListHeader.reuseIdentifier) as? TaskListHeader
             else { return nil }
+            
+//            let count = model.cache.filter { $0.completed != nil }.count
             header.setup(7)
             return header
         }
@@ -82,22 +97,13 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard let presenter = presenter else { return nil }
         
-        let checkSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
-            if let item = self?.model.cache[indexPath.row] {
-                let new = ToDoItem(id: item.id,
-                                   text: item.text,
-                                   priority: item.priority,
-                                   date: item.date,
-                                   deadline: item.deadline,
-                                   completed: (item.completed == nil) ? Date() : nil)
-                if self?.model.change(id: item.id, new: new) != nil {
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
-                }
-            }
+        let checkSwipeAction = UIContextualAction(style: .normal, title: "") { (action, sourceView, completionHandler) in
+            presenter.changeTaskCompletionStatus(forRowAt: indexPath)
             completionHandler(true)
         }
-        if model.cache[indexPath.row].completed == nil {
+        if presenter.isCompleted(forRowAt: indexPath) {
             checkSwipeAction.backgroundColor = .systemGreen
             checkSwipeAction.image = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(.white)
         } else {
@@ -117,10 +123,9 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         infoSwipeAction.image = UIImage(systemName: "info.circle.fill")?.withTintColor(.white)
         
         let deleteSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
-            self?.deletionWarningAlert(message: self?.model.cache[indexPath.row].text) { _ in
-                if self?.model.remove(id: self!.model.cache[indexPath.row].id) != nil {
-                    tableView.reloadData()
-                }
+            let message = self?.presenter?.getTaskItem(forRowAt: indexPath)?.text
+            self?.deletionWarningAlert(message: message) { _ in
+                self?.presenter?.removeTask(forRowAt: indexPath)
             }
             completionHandler(true)
         }

@@ -50,10 +50,11 @@
 
 import Foundation
 
-protocol Cacheable {
+protocol Cacheable: AnyObject {
     var cache: [ToDoItem] { get }
     
     func add(_ item: ToDoItem)
+    func change(id: String, new item: ToDoItem) -> ToDoItem?
     func remove(id: String) -> ToDoItem?
     func removeAll() -> Bool
 }
