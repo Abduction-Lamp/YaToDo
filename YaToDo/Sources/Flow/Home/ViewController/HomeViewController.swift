@@ -30,7 +30,6 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         title = NSLocalizedString("HomeView.Navigation.Title", comment: "My tasks")
     }
     
@@ -45,6 +44,7 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
 }
+
 
 extension HomeViewController: HomeViewControllerProtocol {
     
@@ -88,8 +88,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             guard
                 let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TaskListHeader.reuseIdentifier) as? TaskListHeader
             else { return nil }
-            
-//            let count = model.cache.filter { $0.completed != nil }.count
             header.setup(7)
             return header
         }
@@ -146,12 +144,12 @@ extension HomeViewController {
         configuration.directionalLayoutMargins.top = padding.medium
         configuration.directionalLayoutMargins.bottom = padding.medium
         
-        configuration.attributedText = getTextAttributedText(for: item)
+        configuration.attributedText = getTextAttributedString(for: item)
         configuration.textProperties.numberOfLines = 3
         configuration.textToSecondaryTextVerticalPadding = padding.small
         
         if item.completed == nil {
-            configuration.secondaryAttributedText = getDeadlineAttributedText(for: item)
+            configuration.secondaryAttributedText = getDeadlineAttributedString(for: item)
             configuration.secondaryTextProperties.numberOfLines = 1
             
             configuration.image = UIImage(systemName: "circle")
@@ -167,7 +165,7 @@ extension HomeViewController {
         return configuration
     }
     
-    private func getTextAttributedText(for item: ToDoItem) -> NSAttributedString? {
+    private func getTextAttributedString(for item: ToDoItem) -> NSAttributedString? {
         var attributes: [NSAttributedString.Key: Any] = [:]
         if item.completed == nil {
             attributes[.foregroundColor] = UIColor.label
@@ -181,7 +179,7 @@ extension HomeViewController {
         return text
     }
     
-    private func getDeadlineAttributedText(for item: ToDoItem) -> NSAttributedString? {
+    private func getDeadlineAttributedString(for item: ToDoItem) -> NSAttributedString? {
         guard let deadline = item.deadline else { return nil }
         
         let attributes: [NSAttributedString.Key: Any] = [
@@ -206,7 +204,6 @@ extension HomeViewController {
         return completeText
     }
     
-    
     private func deletionWarningAlert(message: String?, handler: ((UIAlertAction) -> Void)?) {
         let title = NSLocalizedString("General.Alert.Titel.DeleteTask", comment: "Titel")
         let cancel = NSLocalizedString("General.Alert.Cancel", comment: "Cancel")
@@ -215,6 +212,7 @@ extension HomeViewController {
        
         alert.addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: delete, style: .destructive, handler: handler))
+        
         self.present(alert, animated: true, completion: nil)
     }
 }
