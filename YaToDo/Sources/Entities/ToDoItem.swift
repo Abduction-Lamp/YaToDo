@@ -103,7 +103,12 @@ extension ToDoItem {
 extension ToDoItem: Equatable {
     
     static func == (lhs: ToDoItem, rhs: ToDoItem) -> Bool {
-        lhs.id == rhs.id
+        return  lhs.id == rhs.id &&
+                lhs.text == rhs.text &&
+                lhs.priority == rhs.priority &&
+                lhs.date == rhs.date &&
+                lhs.deadline == rhs.deadline &&
+                lhs.completed == rhs.completed
     }
 }
 

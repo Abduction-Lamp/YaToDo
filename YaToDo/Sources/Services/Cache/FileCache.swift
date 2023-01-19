@@ -106,9 +106,23 @@ final class FileCache: Cacheable {
     func change(id: String, new item: ToDoItem) -> ToDoItem? {
         if let index = cache.firstIndex(where: { $0.id == id }) {
             let old = cache[index]
-            cache[index] = item
-            let _ = write(item)
-            return old
+            let new = ToDoItem(id: old.id,
+                               text: item.text,
+                               priority: item.priority,
+                               date: old.date,
+                               deadline: item.deadline,
+                               completed: old.completed)
+            if old != new {
+                let isDeleted = delete(old)
+                let isWritten = write(new)
+                
+                var result: ToDoItem? = nil
+                if isWritten && isDeleted {
+                    cache[index] = new
+                    result = old
+                }
+                return result
+            }
         }
         return nil
     }

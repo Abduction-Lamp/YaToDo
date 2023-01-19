@@ -10,16 +10,17 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
-//    let cache = FileCache()
-
+    
     var router: Routable?
+    
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
+        let cache = FileCache()
+        
         let navigation = UINavigationController()
-        let assembly = AssemblyViewController()
+        let assembly = Assembly(cache: cache)
         router = Router(navigation: navigation, builder: assembly)
         router?.home()
         

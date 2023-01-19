@@ -7,24 +7,25 @@
 
 import UIKit
 
-protocol Routable {
+protocol Routable: AnyObject {
     
     var navigation: UINavigationController? { get }
-    var builder: ModuleBuildable? { get }
     
-    init(navigation: UINavigationController, builder: ModuleBuildable)
+    init(navigation: UINavigationController, builder: Buildable)
     
     func home()
-    func popToRoot(animated: Bool) 
+    func popToRoot(animated: Bool)
+    
+    func task(_ item: ToDoItem?, callback: ((ToDoItem?) -> Void)?) -> UINavigationController
 }
 
 
 final class Router: Routable {
     
     var navigation: UINavigationController?
-    var builder: ModuleBuildable?
+    private var builder: Buildable?
     
-    init(navigation: UINavigationController, builder: ModuleBuildable) {
+    init(navigation: UINavigationController, builder: Buildable) {
         self.navigation = navigation
         self.builder = builder
     }
@@ -37,6 +38,13 @@ final class Router: Routable {
         else { return }
         
         navigation.viewControllers = [vc]
+    }
+    
+    func task(_ item: ToDoItem? = nil, callback: ((ToDoItem?) -> Void)? = nil) -> UINavigationController {
+        guard let vc = builder?.makeTaskModule(task: item, callback: callback) else {
+            return UINavigationController()
+        }
+        return UINavigationController(rootViewController: vc)
     }
     
     func popToRoot(animated: Bool) {

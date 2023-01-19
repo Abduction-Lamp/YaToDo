@@ -74,6 +74,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         guard let item = presenter?.getTaskItem(forRowAt: indexPath),
               let cell = tableView.dequeueReusableCell(withIdentifier: "\(UITableViewCell.self)")
         else { return UITableViewCell() }
+
         cell.accessoryType = .disclosureIndicator
         cell.contentConfiguration = makeContentConfiguration(for: item)
         return cell
@@ -114,8 +115,9 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let infoSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
-            let navigation = UINavigationController(rootViewController: TaskViewController())
-            self?.present(navigation, animated: true, completion: nil)
+            if let navigation = self?.presenter?.showTaskDetails(indexPath: indexPath) {
+                self?.present(navigation, animated: true, completion: nil)
+            }
         }
         infoSwipeAction.backgroundColor = .placeholderText
         infoSwipeAction.image = UIImage(systemName: "info.circle.fill")?.withTintColor(.white)
@@ -137,54 +139,50 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension HomeViewController {
     
-    private func makeContentConfiguration(for item: ToDoItem) -> UIListContentConfiguration {
+    private func makeContentConfiguration(for item: ToDoItem) -> UIListContentConfiguration{
         let padding = Design.shared.padding
-        var configuration = UIListContentConfiguration.subtitleCell()
+        var content = UIListContentConfiguration.subtitleCell()
         
-        configuration.directionalLayoutMargins.top = padding.medium
-        configuration.directionalLayoutMargins.bottom = padding.medium
+        content.directionalLayoutMargins.top = padding.medium
+        content.directionalLayoutMargins.bottom = padding.medium
         
-        configuration.attributedText = getTextAttributedString(for: item)
-        configuration.textProperties.numberOfLines = 3
-        configuration.textToSecondaryTextVerticalPadding = padding.small
+        content.attributedText = getTextAttributedString(for: item)
+        content.textProperties.numberOfLines = 3
+        content.textToSecondaryTextVerticalPadding = padding.small
         
         if item.completed == nil {
-            configuration.secondaryAttributedText = getDeadlineAttributedString(for: item)
-            configuration.secondaryTextProperties.numberOfLines = 1
+            content.secondaryAttributedText = getDeadlineAttributedString(for: item)
+            content.secondaryTextProperties.numberOfLines = 1
             
-            configuration.image = UIImage(systemName: "circle")
+            content.image = UIImage(systemName: "circle")
             if item.priority == .high {
-                configuration.imageProperties.tintColor = .systemRed
+                content.imageProperties.tintColor = .systemRed
             } else {
-                configuration.imageProperties.tintColor = .placeholderText
+                content.imageProperties.tintColor = .placeholderText
             }
         } else {
-            configuration.image = UIImage(systemName: "checkmark.circle.fill")
-            configuration.imageProperties.tintColor = .systemGreen
+            content.image = UIImage(systemName: "checkmark.circle.fill")
+            content.imageProperties.tintColor = .systemGreen
         }
-        return configuration
+        return content
     }
     
     private func getTextAttributedString(for item: ToDoItem) -> NSAttributedString? {
         var attributes: [NSAttributedString.Key: Any] = [:]
         if item.completed == nil {
             attributes[.foregroundColor] = UIColor.label
-            attributes[.strikethroughStyle] = nil
+            attributes[.strikethroughStyle] = NSUnderlineStyle.byWord.rawValue
         } else {
             attributes[.foregroundColor] = UIColor.placeholderText
             attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
         }
-        
-        let text = NSAttributedString(string: item.text, attributes: attributes)
-        return text
+        return NSAttributedString(string: item.text, attributes: attributes)
     }
     
     private func getDeadlineAttributedString(for item: ToDoItem) -> NSAttributedString? {
         guard let deadline = item.deadline else { return nil }
         
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.placeholderText
-        ]
+        let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.placeholderText]
         
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(systemName: "calendar")?.withTintColor(.placeholderText)
@@ -213,16 +211,16 @@ extension HomeViewController {
         alert.addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: delete, style: .destructive, handler: handler))
         
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 }
-
 
 extension HomeViewController {
     
     @objc
     func addTaskButtonClicked(_ sender: UIButton) {
-        let navigation = UINavigationController(rootViewController: TaskViewController())
-        present(navigation, animated: true, completion: nil)
+        if let navigation = presenter?.showNewTask() {
+            present(navigation, animated: true, completion: nil)
+        }
     }
 }

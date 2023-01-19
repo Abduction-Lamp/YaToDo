@@ -43,6 +43,8 @@ class TaskViewController: UIViewController {
 
     private var keyboardHideTapGesture = UITapGestureRecognizer()
     
+    var presenter: TaskPresenterProtocol?
+    
     
     override func loadView() {
         super.loadView()
@@ -61,6 +63,10 @@ class TaskViewController: UIViewController {
         super.viewDidAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        if let task = presenter?.task {
+            setup(item: task)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -150,6 +156,44 @@ extension TaskViewController {
         
         scrollView.contentSize = self.contentSize
     }
+    
+    private func setup(item: ToDoItem) {
+        body.textView.text = item.text
+        body.textView.textColor = .label
+        
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        
+        var priorityIndex = 1
+        switch item.priority {
+        case .low: priorityIndex = 0
+        case .normal: priorityIndex = 1
+        case .high: priorityIndex = 2
+        }
+        conponents.segment.selectedSegmentIndex = priorityIndex
+        
+        if let date = item.deadline {
+            conponents.calendar.minimumDate = date
+            conponents.calendar.date = date
+            conponents.toggle.setOn(true, animated: true)
+            toggleSwitched(conponents.toggle)
+            selectedDate(conponents.calendar)
+        }
+    }
+    
+    private func buildToDoItem() -> ToDoItem? {
+        let text = body.textView.text
+        var priority: Priority = .normal
+        switch conponents.segment.selectedSegmentIndex {
+        case 0: priority = .low
+        case 2: priority = .high
+        default: break
+        }
+        var deadline: Date?
+        if conponents.toggle.isOn {
+            deadline = conponents.calendar.date
+        }
+        return ToDoItem(text: text ?? "", priority: priority, deadline: deadline)
+    }
 }
 
 
@@ -184,44 +228,18 @@ extension TaskViewController {
     }
 
     @objc
-    func saveButtonClicked(_ sender: UIBarButtonItem) {
-        let cache = FileCache()
-        
-        let text = body.textView.text
-        
-        var priority: Priority = .normal
-        switch conponents.segment.selectedSegmentIndex {
-        case 0: priority = .low
-        case 2: priority = .high
-        default: break
-        }
-        
-        var deadline: Date?
-        if conponents.toggle.isOn {
-            deadline = conponents.calendar.date
-        }
-        
-        let item = ToDoItem(text: text ?? "", priority: priority, deadline: deadline)
-        
-        cache.add(item)
-        Swift.debugPrint(item)
-        Swift.debugPrint("--- === \(cache.cache.count) === ---")
-        for task in cache.cache {
-            Swift.debugPrint(task)
-        }
-        
-        
-        // TODO: Показать анимацию о сохранении
-        dismiss(animated: true, completion: nil)
+    private func saveButtonClicked(_ sender: UIBarButtonItem) {
+        let new = buildToDoItem()
+        presenter?.dismiss(new)
     }
     
     @objc
-    func removeButtonClicked(_ sender: UIButton) {
+    private func removeButtonClicked(_ sender: UIButton) {
         Swift.debugPrint("removeButtonClicked")
     }
 
     @objc
-    func toggleSwitched(_ sender: UISwitch) {
+    private func toggleSwitched(_ sender: UISwitch) {
         if sender.isOn {
             let size = conponents.addCalendar()
             conponentsHeightConstraint.constant += size.height
@@ -239,7 +257,7 @@ extension TaskViewController {
     }
 
     @objc
-    func selectedDate(_ sender: UIDatePicker) {
+    private func selectedDate(_ sender: UIDatePicker) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMMM yyyy, HH:mm"
         let strDate = dateFormatter.string(from: sender.date)
@@ -293,5 +311,15 @@ extension TaskViewController: UIGestureRecognizerDelegate {
         } else {
             return true
         }
+    }
+}
+
+
+extension TaskViewController: TaskViewControllerProtocol {
+    
+    func finish(animated flag: Bool, completion: (() -> Void)? = nil) {
+        
+        // TODO: Показать анимацию
+        dismiss(animated: flag, completion: completion)
     }
 }
