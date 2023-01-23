@@ -113,8 +113,7 @@ extension HomePresenter {
     func showNewTask() -> UINavigationController {
         guard let router = router else { return UINavigationController() }
         return router.task(nil) { [weak self] new in
-            if let self = self, let new = new {
-                self.list?.add(new)
+            if let self = self, let new = new, let list = self.list, list.add(new) {
                 self.vc?.update()
             }
         }

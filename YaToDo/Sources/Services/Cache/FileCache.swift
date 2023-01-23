@@ -53,7 +53,7 @@ import Foundation
 protocol Cacheable: AnyObject {
     var cache: [ToDoItem] { get }
     
-    func add(_ item: ToDoItem)
+    func add(_ item: ToDoItem) -> Bool
     func change(id: String, new item: ToDoItem) -> ToDoItem?
     func remove(id: String) -> ToDoItem?
     func removeAll() -> Bool
@@ -96,33 +96,30 @@ final class FileCache: Cacheable {
     }
     
     
-    func add(_ item: ToDoItem) {
+    func add(_ item: ToDoItem) -> Bool {
+        var result = false
         if !cache.contains(item) {
             cache.append(item)
-            let _ = write(item)
+            result = write(item)
         }
+        return result
     }
     
     func change(id: String, new item: ToDoItem) -> ToDoItem? {
         if let index = cache.firstIndex(where: { $0.id == id }) {
             let old = cache[index]
-            let new = ToDoItem(id: old.id,
-                               text: item.text,
-                               priority: item.priority,
-                               date: old.date,
-                               deadline: item.deadline,
-                               completed: old.completed)
-            if old != new {
+            if old != item {
                 let isDeleted = delete(old)
-                let isWritten = write(new)
+                let isWritten = write(item)
                 
                 var result: ToDoItem? = nil
                 if isWritten && isDeleted {
-                    cache[index] = new
+                    cache[index] = item
                     result = old
                 }
                 return result
             }
+            return old
         }
         return nil
     }
@@ -130,8 +127,9 @@ final class FileCache: Cacheable {
     func remove(id: String) -> ToDoItem? {
         if let index = cache.firstIndex(where: { $0.id == id }) {
             let item = cache.remove(at: index)
-            let _ = delete(item)
-            return item
+            if delete(item) {
+                return item
+            }
         }
         return nil
     }

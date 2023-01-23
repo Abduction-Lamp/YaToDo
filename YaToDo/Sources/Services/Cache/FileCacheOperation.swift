@@ -32,7 +32,7 @@
 import Foundation
 
 final class FileCacheOperation: Cacheable {
-
+    
     private var root: URL? = nil
     private(set) var cache: [ToDoItem] = []
     
@@ -43,11 +43,13 @@ final class FileCacheOperation: Cacheable {
     }
     
     
-    func add(_ item: ToDoItem) {
+    func add(_ item: ToDoItem) -> Bool {
+        var result = false
         if !cache.contains(item) {
             cache.append(item)
-            let _ = write(item)
+            result = write(item)
         }
+        return result
     }
     
     func change(id: String, new item: ToDoItem) -> ToDoItem? {

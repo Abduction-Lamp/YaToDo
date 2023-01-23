@@ -18,7 +18,9 @@ protocol TaskPresenterProtocol: AnyObject {
     var task: ToDoItem? { get }
     
     init(_ viewController: TaskViewControllerProtocol, item: ToDoItem?, callback: ((ToDoItem?) -> Void)?)
-    func dismiss(_ item: ToDoItem?)
+    func save(text: String, priority: Priority, deadline: Date?)
+    func remove()
+//    func dismiss(_ item: ToDoItem?)
 }
 
 
@@ -36,9 +38,28 @@ final class TaskPresenter: TaskPresenterProtocol {
         self.callback = callback
     }
     
-    func dismiss(_ item: ToDoItem? = nil) {
-        task = item
-        callback?(task)
+//    func dismiss(_ item: ToDoItem? = nil) {
+//        task = item
+//        callback?(task)
+//        vc?.finish(animated: true, completion: nil)
+//    }
+    
+    func save(text: String, priority: Priority, deadline: Date?) {
+        var id: String = UUID().uuidString
+        var date: Date = Date()
+        
+        if let task = task {
+            id = task.id
+            date = task.date
+        }
+        let new = ToDoItem(id: id, text: text, priority: priority, date: date, deadline: deadline, completed: task?.completed)
+        callback?(new)
         vc?.finish(animated: true, completion: nil)
     }
+    
+    func remove() {
+        callback?(nil)
+        vc?.finish(animated: true, completion: nil)
+    }
+
 }

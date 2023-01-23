@@ -160,8 +160,7 @@ extension TaskViewController {
     private func setup(item: ToDoItem) {
         body.textView.text = item.text
         body.textView.textColor = .label
-        
-        navigationItem.rightBarButtonItem?.isEnabled = true
+        textViewDidChange(body.textView)
         
         var priorityIndex = 1
         switch item.priority {
@@ -178,21 +177,6 @@ extension TaskViewController {
             toggleSwitched(conponents.toggle)
             selectedDate(conponents.calendar)
         }
-    }
-    
-    private func buildToDoItem() -> ToDoItem? {
-        let text = body.textView.text
-        var priority: Priority = .normal
-        switch conponents.segment.selectedSegmentIndex {
-        case 0: priority = .low
-        case 2: priority = .high
-        default: break
-        }
-        var deadline: Date?
-        if conponents.toggle.isOn {
-            deadline = conponents.calendar.date
-        }
-        return ToDoItem(text: text ?? "", priority: priority, deadline: deadline)
     }
 }
 
@@ -229,13 +213,33 @@ extension TaskViewController {
 
     @objc
     private func saveButtonClicked(_ sender: UIBarButtonItem) {
-        let new = buildToDoItem()
-        presenter?.dismiss(new)
+        let text = body.textView.text ?? ""
+        var priority: Priority = .normal
+        switch conponents.segment.selectedSegmentIndex {
+        case 0: priority = .low
+        case 2: priority = .high
+        default: break
+        }
+        var deadline: Date?
+        if conponents.toggle.isOn {
+            deadline = conponents.calendar.date
+        }
+        
+        presenter?.save(text: text, priority: priority, deadline: deadline)
     }
     
     @objc
     private func removeButtonClicked(_ sender: UIButton) {
-        Swift.debugPrint("removeButtonClicked")
+        let title = NSLocalizedString("General.Alert.Titel.DeleteTask", comment: "Titel")
+        let cancel = NSLocalizedString("General.Alert.Cancel", comment: "Cancel")
+        let delete = NSLocalizedString("General.Alert.Delete", comment: "Delete")
+        let alert = UIAlertController(title: title, message: "", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: delete, style: .destructive, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.presenter?.remove()
+        }))
+        present(alert, animated: true, completion: nil)
     }
 
     @objc

@@ -102,7 +102,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             presenter.changeTaskCompletionStatus(forRowAt: indexPath)
             completionHandler(true)
         }
-        if presenter.isCompleted(forRowAt: indexPath) {
+        if !presenter.isCompleted(forRowAt: indexPath) {
             checkSwipeAction.backgroundColor = .systemGreen
             checkSwipeAction.image = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(.white)
         } else {
