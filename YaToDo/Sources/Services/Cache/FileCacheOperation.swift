@@ -33,33 +33,68 @@ import Foundation
 
 final class FileCacheOperation: Cacheable {
     
+    private let concurrent = OperationQueue()
+    private let serial = OperationQueue()
+        
     private var root: URL? = nil
     private(set) var cache: [ToDoItem] = []
     
     
     init() {
+        concurrent.name = "FileCache: Concurrent Queue"
+        serial.name = "FileCache: Serial Queue"
+        serial.maxConcurrentOperationCount = 1
+        
         root = getRootDir()
         fetch()
     }
     
     
     func add(_ item: ToDoItem) -> Bool {
-        var result = false
         if !cache.contains(item) {
             cache.append(item)
-            result = write(item)
+            if var dir = root, AppKeys.shared.homeDirectory == FileManager.default.displayName(atPath: dir.path) {
+                dir.appendPathComponent(item.id)
+                
+                let save = SerializationToFile(url: dir, object: item)
+                concurrent.addOperation(save)
+            }
         }
-        return result
+        return true
     }
     
     func change(id: String, new item: ToDoItem) -> ToDoItem? {
+        if let index = cache.firstIndex(where: { $0.id == id }) {
+            let old = cache[index]
+            
+            if var dir = root, AppKeys.shared.homeDirectory == FileManager.default.displayName(atPath: dir.path), old != item {
+                dir.appendPathComponent(item.id)
+                
+                cache[index] = item
+                
+                let remove = RemoveFile(url: dir)
+                let save = SerializationToFile(url: dir, object: item)
+            
+                serial.addOperation(remove)
+                serial.addOperation(save)
+                
+                return item
+            }
+            return old
+        }
         return nil
     }
-     
+    
+    
     func remove(id: String) -> ToDoItem? {
         if let index = cache.firstIndex(where: { $0.id == id }) {
             let item = cache.remove(at: index)
-            let _ = delete(item)
+            
+            if var dir = root, AppKeys.shared.homeDirectory == FileManager.default.displayName(atPath: dir.path) {
+                dir.appendPathComponent(item.id)
+                let remove = RemoveFile(url: dir)
+                concurrent.addOperation(remove)
+            }
             return item
         }
         return nil
@@ -123,29 +158,52 @@ extension FileCacheOperation {
     }
     
     private func fetch() {
+        let sortOperation = BlockOperation { [weak self] in
+            guard let self = self else { return }
+            
+            
+            print(".\tsort")
+            
+            
+            self.cache.sort { $0.date < $1.date }
+        }
+        
         for file in getFiles() {
             guard
                 let resourceValues = try? file.resourceValues(forKeys: [.isDirectoryKey]),
                 let isDirectory = resourceValues.isDirectory,
                 !isDirectory
             else { continue }
-            do {
-                let data = try Data(contentsOf: file)
-                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
-                if let item = ToDoItem.parse(json) {
-                    cache.append(item)
+            
+            let parse = SerializationFromFile(url: file)
+            let accumulation = BlockOperation { [parse] in
+                
+                print(" +\taccumulation")
+                
+                switch parse.result {
+                case let .success(item):
+                    self.cache.append(item)
+                case let .failure(error):
+                    print(error)
+                case .none:
+                    print(FileCacheError.nonResult)
                 }
-            } catch {
-                print(FileCacheError.readFile(error))
-                continue
             }
+            
+            accumulation.addDependency(parse)
+            sortOperation.addDependency(accumulation)
+            
+            concurrent.addOperation(parse)
+            serial.addOperation(accumulation)
         }
+        serial.addOperation(sortOperation)
     }
     
     private func write(_ item: ToDoItem) -> Bool {
         var result = false
-        if var dir = root,
-           AppKeys.shared.homeDirectory == FileManager.default.displayName(atPath: dir.path) {
+        if var dir = root, AppKeys.shared.homeDirectory == FileManager.default.displayName(atPath: dir.path) {
+            
+            
             dir.appendPathComponent(item.id)
             do {
                 let data = try JSONSerialization.data(withJSONObject: item.json, options: [])
@@ -185,5 +243,82 @@ extension FileCacheOperation {
             }
         }
         return result
+    }
+}
+
+
+extension FileCacheOperation {
+    
+   private class SerializationFromFile: Operation {
+        private let url: URL
+        private(set) var result: Result<ToDoItem, FileCacheError>?
+        
+        init(url: URL) {
+            self.url = url
+        }
+        
+        override func main() {
+
+            
+            print(">\tread")
+            
+            
+            do {
+                let data = try Data(contentsOf: url)
+                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+                if let item = ToDoItem.parse(json) {
+                    result = .success(item)
+                }
+            } catch {
+                result = .failure(FileCacheError.readFile(error))
+            }
+        }
+    }
+    
+    private class SerializationToFile: Operation {
+        private let url: URL
+        private let object: ToDoItem
+        private(set) var result: Result<Bool, FileCacheError>?
+        
+        init(url: URL, object: ToDoItem) {
+            self.url = url
+            self.object = object
+        }
+        
+        override func main() {
+            
+            print("<\twrite")
+            
+            
+            do {
+                let data = try JSONSerialization.data(withJSONObject: object.json, options: [])
+                let isCreated = FileManager.default.createFile(atPath: url.path, contents: data, attributes: nil)
+                result = .success(isCreated)
+            } catch {
+                result = .failure(FileCacheError.writeFile(error))
+            }
+        }
+    }
+    
+    private class RemoveFile: Operation {
+        private let url: URL
+        private(set) var result: Result<Bool, FileCacheError>?
+        
+        init(url: URL) {
+            self.url = url
+        }
+        
+        override func main() {
+            
+            print("X\twrite")
+            
+            
+            do {
+                try FileManager.default.removeItem(at: url)
+                result = .success(true)
+            } catch {
+                result = .failure(FileCacheError.removeFile(error))
+            }
+        }
     }
 }

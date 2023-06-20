@@ -24,7 +24,6 @@ class HomeViewController: UIViewController {
         
         homeView.table.delegate = self
         homeView.table.dataSource = self
-        
         homeView.addTaskButton.addTarget(self, action: #selector(addTaskButtonClicked(_:)), for: .touchUpInside)
     }
     
@@ -139,13 +138,11 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension HomeViewController {
     
-    private func makeContentConfiguration(for item: ToDoItem) -> UIListContentConfiguration{
+    private func makeContentConfiguration(for item: ToDoItem) -> UIListContentConfiguration {
         let padding = Design.shared.padding
         var content = UIListContentConfiguration.subtitleCell()
-        
         content.directionalLayoutMargins.top = padding.medium
         content.directionalLayoutMargins.bottom = padding.medium
-        
         content.attributedText = getTextAttributedString(for: item)
         content.textProperties.numberOfLines = 3
         content.textToSecondaryTextVerticalPadding = padding.small
@@ -153,7 +150,6 @@ extension HomeViewController {
         if item.completed == nil {
             content.secondaryAttributedText = getDeadlineAttributedString(for: item)
             content.secondaryTextProperties.numberOfLines = 1
-            
             content.image = UIImage(systemName: "circle")
             if item.priority == .high {
                 content.imageProperties.tintColor = .systemRed
@@ -183,7 +179,6 @@ extension HomeViewController {
         guard let deadline = item.deadline else { return nil }
         
         let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.placeholderText]
-        
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(systemName: "calendar")?.withTintColor(.placeholderText)
         if let imageWidth = imageAttachment.image?.size.width,
@@ -191,14 +186,12 @@ extension HomeViewController {
            let baselineOffset = imageAttachment.image?.baselineOffsetFromBottom {
             imageAttachment.bounds = CGRect(x: 0, y: -baselineOffset, width: imageWidth, height: imageHeight)
         }
-        
         let imageToString = NSAttributedString(attachment: imageAttachment)
         let text = NSAttributedString(string: " " + deadline.toString(), attributes: attributes)
         
         let completeText = NSMutableAttributedString(string: "")
         completeText.append(imageToString)
         completeText.append(text)
-        
         return completeText
     }
     

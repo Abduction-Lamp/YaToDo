@@ -20,7 +20,6 @@ protocol TaskPresenterProtocol: AnyObject {
     init(_ viewController: TaskViewControllerProtocol, item: ToDoItem?, callback: ((ToDoItem?) -> Void)?)
     func save(text: String, priority: Priority, deadline: Date?)
     func remove()
-//    func dismiss(_ item: ToDoItem?)
 }
 
 
@@ -37,12 +36,6 @@ final class TaskPresenter: TaskPresenterProtocol {
         task = item
         self.callback = callback
     }
-    
-//    func dismiss(_ item: ToDoItem? = nil) {
-//        task = item
-//        callback?(task)
-//        vc?.finish(animated: true, completion: nil)
-//    }
     
     func save(text: String, priority: Priority, deadline: Date?) {
         var id: String = UUID().uuidString
@@ -61,5 +54,4 @@ final class TaskPresenter: TaskPresenterProtocol {
         callback?(nil)
         vc?.finish(animated: true, completion: nil)
     }
-
 }

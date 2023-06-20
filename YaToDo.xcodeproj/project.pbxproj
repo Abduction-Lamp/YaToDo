@@ -133,6 +133,7 @@
 		4E1557FE292D07030069197B /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				4EC12F5E2A4072A7005E25A8 /* Views */,
 				4EF6CDB82948B70800BA9DF1 /* Extentions */,
 				4E1557FF292D073E0069197B /* Design.swift */,
 				4E9E6DC12970339200A53F25 /* AsyncOperation.swift */,
@@ -348,6 +349,13 @@
 				4E8D10CF292BA22200323AD9 /* HomeViewController.swift */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		4EC12F5E2A4072A7005E25A8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		4EF6CDB82948B70800BA9DF1 /* Extentions */ = {

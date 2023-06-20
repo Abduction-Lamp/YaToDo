@@ -15,7 +15,6 @@ final class TaskListHeader: UITableViewHeaderFooterView {
         return Design.shared.simpleСellHeight
     }
     
-    
     private var label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +26,6 @@ final class TaskListHeader: UITableViewHeaderFooterView {
     private(set) var button: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-
         button.titleLabel?.font = .boldSystemFont(ofSize: UIFont.systemFontSize)
         button.setTitle("Показать", for: .normal)
         return button
@@ -55,16 +53,13 @@ extension TaskListHeader {
     
     private func buildUI() {
         backgroundColor = .clear
-        
         contentView.addSubview(label)
         contentView.addSubview(button)
-        
         configureConstraints()
     }
     
     private func configureConstraints() {
         let padding = Design.shared.padding
-        
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding.small),
             label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding.medium),

@@ -13,10 +13,8 @@ class HomeView: UIView {
         let table = UITableView(frame: .zero, style: .insetGrouped)
         table.translatesAutoresizingMaskIntoConstraints = false
         table.separatorStyle = .singleLine
-        
         table.register(TaskListHeader.self, forHeaderFooterViewReuseIdentifier: TaskListHeader.reuseIdentifier)
         table.register(UITableViewCell.self, forCellReuseIdentifier: "\(UITableViewCell.self)")
-        
         return table
     }()
     
@@ -52,7 +50,6 @@ class HomeView: UIView {
         backgroundColor = .systemGroupedBackground
         addSubview(table)
         addSubview(addTaskButton)
-        
         configureConstraints()
     }
     

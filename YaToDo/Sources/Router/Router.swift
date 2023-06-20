@@ -9,7 +9,7 @@ import UIKit
 
 protocol Routable: AnyObject {
     
-    var navigation: UINavigationController? { get }
+    var navigation: UINavigationController { get }
     
     init(navigation: UINavigationController, builder: Buildable)
     
@@ -22,32 +22,25 @@ protocol Routable: AnyObject {
 
 final class Router: Routable {
     
-    var navigation: UINavigationController?
-    private var builder: Buildable?
+    var navigation: UINavigationController
+    private var builder: Buildable
     
     init(navigation: UINavigationController, builder: Buildable) {
         self.navigation = navigation
         self.builder = builder
     }
     
-    
     func home() {
-        guard
-            let navigation = navigation,
-            let vc = builder?.makeHomeModule(router: self)
-        else { return }
-        
+        let vc = builder.makeHomeModule(router: self)
         navigation.viewControllers = [vc]
     }
     
     func task(_ item: ToDoItem? = nil, callback: ((ToDoItem?) -> Void)? = nil) -> UINavigationController {
-        guard let vc = builder?.makeTaskModule(task: item, callback: callback) else {
-            return UINavigationController()
-        }
+        let vc = builder.makeTaskModule(task: item, callback: callback)
         return UINavigationController(rootViewController: vc)
     }
     
     func popToRoot(animated: Bool) {
-        navigation?.popToRootViewController(animated: animated)
+        navigation.popToRootViewController(animated: animated)
     }
 }

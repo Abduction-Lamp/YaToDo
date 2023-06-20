@@ -26,15 +26,13 @@ final class Assembly: Buildable {
     
     func makeHomeModule(router: Routable) -> UIViewController & HomeViewControllerProtocol {
         let vc = HomeViewController()
-        let presenter = HomePresenter(vc, router: router, cache: cache)
-        vc.presenter = presenter
+        vc.presenter = HomePresenter(vc, router: router, cache: cache)
         return vc
     }
     
     func makeTaskModule(task: ToDoItem? = nil, callback: ((ToDoItem?) -> Void)? = nil) -> UIViewController & TaskViewControllerProtocol {
         let vc = TaskViewController()
-        let presenter = TaskPresenter(vc, item: task, callback: callback)
-        vc.presenter = presenter
+        vc.presenter = TaskPresenter(vc, item: task, callback: callback)
         return vc
     }
 }
