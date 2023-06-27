@@ -19,6 +19,8 @@ protocol HomePresenterProtocol: AnyObject {
     
     init(_ viewController: HomeViewControllerProtocol, router: Routable, cache: Cacheable)
     
+    var numberOfCompletedTask: Int { get }
+    
     func numberOfSections() -> Int
     func numberOfRowsInSection() -> Int
     
@@ -45,6 +47,18 @@ final class HomePresenter: HomePresenterProtocol {
         vc = viewController
         self.router = router
         list = cache
+    }
+    
+    
+    var numberOfCompletedTask: Int {
+        guard let list = list else { return 0 }
+        
+        return list.cache.reduce(0) { sum, element in
+            if element.completed != nil {
+                return sum + 1
+            }
+            return sum
+        }
     }
 }
 

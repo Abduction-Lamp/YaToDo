@@ -20,16 +20,18 @@
 
 "HomeView.Navigation.Title" = "Мои дела";
 
-"HomeView.TaskList.Header" = "Завершенные ";
+"HomeView.TaskList.Header.CompletedTitle" = "Завершенные ";
+"HomeView.TaskList.Header.Button.Show" = "Показать";
+"HomeView.TaskList.Header.Button.Hide" = "Скрыть";
 
 
 // MARK: - TaskView
 
 "TaskView.Navigation.Title" = "Дело";
-"TaskView.Navigation.CancelButton" = "Отмена";
-"TaskView.Navigation.SaveButton" = "Сохранить";
+"TaskView.Navigation.Button.Cancel" = "Отмена";
+"TaskView.Navigation.Button.Save" = "Сохранить";
 
 "TaskView.TextView.Placeholder" = "Что надо сделать?";
-"TaskView.PriorityLabel" = "Приоритет";
-"TaskView.DeadlineLabel" = "Сделать до";
-"TaskView.RemoveButton" = "Удалить";
+"TaskView.Label.Priority" = "Приоритет";
+"TaskView.Label.Deadline" = "Сделать до";
+"TaskView.Button.Remove" = "Удалить";

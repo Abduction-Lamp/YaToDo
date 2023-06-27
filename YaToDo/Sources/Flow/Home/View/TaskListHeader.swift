@@ -23,11 +23,11 @@ final class TaskListHeader: UITableViewHeaderFooterView {
         return label
     }()
     
+   
     private(set) var button: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = .boldSystemFont(ofSize: UIFont.systemFontSize)
-        button.setTitle("Показать", for: .normal)
         return button
     }()
     
@@ -39,20 +39,19 @@ final class TaskListHeader: UITableViewHeaderFooterView {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("📛 TaskListHeader init(coder:) has not been implemented")
+        fatalError("⚠️ TaskListHeader init(coder:) has not been implemented")
     }
 
-    override func prepareForReuse() {
-        label.text = NSLocalizedString("HomeView.TaskList.Header", comment: "Completed") + "\u{2014} 0"
-        super.prepareForReuse()
-    }
+//    override func prepareForReuse() {
+//        label.text = NSLocalizedString("HomeView.TaskList.Header.CompletedTitle", comment: "Completed") + "\u{2014}"
+//        super.prepareForReuse()
+//    }
 }
 
 
 extension TaskListHeader {
     
     private func buildUI() {
-        backgroundColor = .clear
         contentView.addSubview(label)
         contentView.addSubview(button)
         configureConstraints()
@@ -60,6 +59,7 @@ extension TaskListHeader {
     
     private func configureConstraints() {
         let padding = Design.shared.padding
+        
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding.small),
             label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding.medium),
@@ -71,11 +71,17 @@ extension TaskListHeader {
             button.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding.medium),
             button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding.small)
         ])
+        
+        button.setContentHuggingPriority(.required, for: .horizontal)
     }
     
     
     func setup(_ count: Int) {
-        label.text = NSLocalizedString("HomeView.TaskList.Header", comment: "Completed") + "\u{2014} \(count)"
+        label.text = NSLocalizedString("HomeView.TaskList.Header.CompletedTitle", comment: "Completed") + "\u{2014} \(count)"
         count > 0 ? (button.isEnabled = true) : (button.isEnabled = false)
+        let showTitle = NSLocalizedString("HomeView.TaskList.Header.Button.Show", comment: "Show")
+        let hideTitle = NSLocalizedString("HomeView.TaskList.Header.Button.Hide", comment: "Hide")
+    
+        count > 0 ? button.setTitle(hideTitle, for: .normal) : button.setTitle(showTitle, for: .normal)
     }
 }

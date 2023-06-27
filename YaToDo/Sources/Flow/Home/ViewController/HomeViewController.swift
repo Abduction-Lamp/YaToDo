@@ -32,7 +32,6 @@ class HomeViewController: UIViewController {
         title = NSLocalizedString("HomeView.Navigation.Title", comment: "My tasks")
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -69,16 +68,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         return presenter.numberOfRowsInSection()
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let item = presenter?.getTaskItem(forRowAt: indexPath),
-              let cell = tableView.dequeueReusableCell(withIdentifier: "\(UITableViewCell.self)")
-        else { return UITableViewCell() }
-
-        cell.accessoryType = .disclosureIndicator
-        cell.contentConfiguration = makeContentConfiguration(for: item)
-        return cell
-    }
-    
+    // MARK: - TableView Header
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         section == 0 ? TaskListHeader.height : 0
     }
@@ -88,15 +78,25 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             guard
                 let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TaskListHeader.reuseIdentifier) as? TaskListHeader
             else { return nil }
-            header.setup(7)
+            header.setup(presenter?.numberOfCompletedTask ?? 0)
             return header
         }
         return nil
     }
     
+    // MARK: - TableView Cell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let item = presenter?.getTaskItem(forRowAt: indexPath),
+              let cell = tableView.dequeueReusableCell(withIdentifier: "\(UITableViewCell.self)")
+        else { return UITableViewCell() }
+        
+        cell.accessoryType = .disclosureIndicator
+        cell.contentConfiguration = makeContentConfiguration(for: item)
+        return cell
+    }
+
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard let presenter = presenter else { return nil }
-        
         let checkSwipeAction = UIContextualAction(style: .normal, title: "") { (action, sourceView, completionHandler) in
             presenter.changeTaskCompletionStatus(forRowAt: indexPath)
             completionHandler(true)
@@ -112,7 +112,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
         let infoSwipeAction = UIContextualAction(style: .normal, title: "") { [weak self] (action, sourceView, completionHandler) in
             if let navigation = self?.presenter?.showTaskDetails(indexPath: indexPath) {
                 self?.present(navigation, animated: true, completion: nil)
@@ -141,8 +140,10 @@ extension HomeViewController {
     private func makeContentConfiguration(for item: ToDoItem) -> UIListContentConfiguration {
         let padding = Design.shared.padding
         var content = UIListContentConfiguration.subtitleCell()
+        
         content.directionalLayoutMargins.top = padding.medium
         content.directionalLayoutMargins.bottom = padding.medium
+        
         content.attributedText = getTextAttributedString(for: item)
         content.textProperties.numberOfLines = 3
         content.textToSecondaryTextVerticalPadding = padding.small
@@ -160,6 +161,7 @@ extension HomeViewController {
             content.image = UIImage(systemName: "checkmark.circle.fill")
             content.imageProperties.tintColor = .systemGreen
         }
+        
         return content
     }
     
@@ -192,21 +194,11 @@ extension HomeViewController {
         let completeText = NSMutableAttributedString(string: "")
         completeText.append(imageToString)
         completeText.append(text)
+        
         return completeText
     }
-    
-    private func deletionWarningAlert(message: String?, handler: ((UIAlertAction) -> Void)?) {
-        let title = NSLocalizedString("General.Alert.Titel.DeleteTask", comment: "Titel")
-        let cancel = NSLocalizedString("General.Alert.Cancel", comment: "Cancel")
-        let delete = NSLocalizedString("General.Alert.Delete", comment: "Delete")
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
-       
-        alert.addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: delete, style: .destructive, handler: handler))
-        
-        present(alert, animated: true, completion: nil)
-    }
 }
+
 
 extension HomeViewController {
     
@@ -215,5 +207,17 @@ extension HomeViewController {
         if let navigation = presenter?.showNewTask() {
             present(navigation, animated: true, completion: nil)
         }
+    }
+    
+    private func deletionWarningAlert(message: String?, handler: ((UIAlertAction) -> Void)?) {
+        let title = NSLocalizedString("General.Alert.Titel.DeleteTask", comment: "Titel")
+        let cancel = NSLocalizedString("General.Alert.Cancel", comment: "Cancel")
+        let delete = NSLocalizedString("General.Alert.Delete", comment: "Delete")
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: delete, style: .destructive, handler: handler))
+        
+        present(alert, animated: true, completion: nil)
     }
 }

@@ -8,19 +8,23 @@
 import UIKit
 
 final class Design {
-    typealias Padding = (small: CGFloat, medium: CGFloat, large: CGFloat)
-    typealias Screen = (width: CGFloat, half: CGFloat, quarter: CGFloat)
+    
+    typealias Padding = (small: CGFloat, base: CGFloat, medium: CGFloat, large: CGFloat)
+    typealias ScreenSize = (width: CGFloat, half: CGFloat, quarter: CGFloat)
     typealias FontHeight = (small: CGFloat, system: CGFloat, label: CGFloat)
     
-    
     let padding: Padding
-    let screen: Screen
+    let screen: ScreenSize
     let fontHeight: FontHeight
+    
     let simpleСellHeight: CGFloat
     
+    
+    
     static let shared = Design()
+    
     private init() {
-        padding = (small: 6, medium: 16, large: 27)
+        padding = (small: 6, base: 12, medium: 16, large: 27)
         
         let width = UIScreen.main.bounds.size.width
         screen = (width: width, half: width/2, quarter: width/4)

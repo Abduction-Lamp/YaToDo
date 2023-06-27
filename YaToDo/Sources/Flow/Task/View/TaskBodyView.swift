@@ -28,7 +28,7 @@ class TaskBodyView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("📛 TaskBodyView init(coder:) has not been implemented")
+        fatalError("⚠️ TaskBodyView init(coder:) has not been implemented")
     }
 }
 

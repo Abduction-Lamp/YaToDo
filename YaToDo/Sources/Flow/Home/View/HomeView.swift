@@ -19,7 +19,8 @@ class HomeView: UIView {
     }()
     
     private let addTaskButtonSize = CGSize(width: 56, height: 56)
-    lazy private(set) var addTaskButton: UIButton = {
+    
+    private(set) lazy var addTaskButton: UIButton = {
         let image = UIImage(systemName: "plus")
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +44,7 @@ class HomeView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("📛 HomeView init(coder:) has not been implemented")
+        fatalError("⚠️ HomeView init(coder:) has not been implemented")
     }
     
     private func buildUI() {

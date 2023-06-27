@@ -20,16 +20,18 @@
 
 "HomeView.Navigation.Title" = "My tasks";
 
-"HomeView.TaskList.Header" = "Completed ";
+"HomeView.TaskList.Header.CompletedTitle" = "Completed ";
+"HomeView.TaskList.Header.Button.Show" = "Show";
+"HomeView.TaskList.Header.Button.Hide" = "Hide";
 
 
 // MARK: - TaskView
 
 "TaskView.Navigation.Title" = "Task";
-"TaskView.Navigation.CancelButton" = "Cancel";
-"TaskView.Navigation.SaveButton" = "Save";
+"TaskView.Navigation.Button.Cancel" = "Cancel";
+"TaskView.Navigation.Button.Save" = "Save";
 
 "TaskView.TextView.Placeholder" = "What needs to be done?";
-"TaskView.PriorityLabel" = "Priority";
-"TaskView.DeadlineLabel" = "Deadline";
-"TaskView.RemoveButton" = "Remove";
+"TaskView.Label.Priority" = "Priority";
+"TaskView.Label.Deadline" = "Deadline";
+"TaskView.Button.Remove" = "Remove";

@@ -14,7 +14,7 @@ class TaskComponentsView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: UIFont.labelFontSize)
         label.textColor = .label
-        label.text = NSLocalizedString("TaskView.PriorityLabel", comment: "Priority")
+        label.text = NSLocalizedString("TaskView.Label.Priority", comment: "Priority")
         return label
     }()
     
@@ -57,7 +57,7 @@ class TaskComponentsView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: UIFont.labelFontSize)
         label.textColor = .label
-        label.text = NSLocalizedString("TaskView.DeadlineLabel", comment: "Deadline")
+        label.text = NSLocalizedString("TaskView.Label.Deadline", comment: "Deadline")
         return label
     }()
     
@@ -106,7 +106,7 @@ class TaskComponentsView: UIView {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("📛 TaskComponentsView init(coder:) has not been implemented")
+        fatalError("⚠️ TaskComponentsView init(coder:) has not been implemented")
     }
     
     override func layoutSubviews() {

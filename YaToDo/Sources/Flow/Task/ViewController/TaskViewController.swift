@@ -36,7 +36,7 @@ class TaskViewController: UIViewController {
         button.setTitleColor(.systemRed, for: .normal)
         button.layer.cornerRadius = 10
         button.clipsToBounds = true
-        let title = NSLocalizedString("TaskView.RemoveButton", comment: "Remove")
+        let title = NSLocalizedString("TaskView.Button.Remove", comment: "Remove")
         button.setTitle(title, for: .normal)
         return button
     }()
@@ -86,8 +86,8 @@ extension TaskViewController {
     private func configureNavigationController() {
         title = NSLocalizedString("TaskView.Navigation.Title", comment: "Task")
 
-        let cancelTitle = NSLocalizedString("TaskView.Navigation.CancelButton", comment: "Cancel")
-        let saveTitle = NSLocalizedString("TaskView.Navigation.SaveButton", comment: "Save")
+        let cancelTitle = NSLocalizedString("TaskView.Navigation.Button.Cancel", comment: "Cancel")
+        let saveTitle = NSLocalizedString("TaskView.Navigation.Button.Save", comment: "Save")
 
         let cancelButton = UIBarButtonItem(title: cancelTitle, style: .plain, target: self, action: #selector(cancelButtonClicked(_:)))
         let saveButton = UIBarButtonItem(title: saveTitle, style: .done, target: self, action: #selector(saveButtonClicked(_:)))
