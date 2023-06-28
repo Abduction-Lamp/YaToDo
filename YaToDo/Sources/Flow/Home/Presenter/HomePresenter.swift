@@ -20,6 +20,7 @@ protocol HomePresenterProtocol: AnyObject {
     init(_ viewController: HomeViewControllerProtocol, router: Routable, cache: Cacheable)
     
     var numberOfCompletedTask: Int { get }
+    var isHideCompletedTasks: Bool { set get }
     
     func numberOfSections() -> Int
     func numberOfRowsInSection() -> Int
@@ -42,6 +43,7 @@ final class HomePresenter: HomePresenterProtocol {
     private weak var router: Routable?
     private weak var list: Cacheable?   // Список задач пользователя
     
+    var isHideCompletedTasks = false
     
     init(_ viewController: HomeViewControllerProtocol, router: Routable, cache: Cacheable) {
         vc = viewController
@@ -71,7 +73,7 @@ extension HomePresenter {
     
     func numberOfRowsInSection() -> Int {
         guard let list = list else { return 0 }
-        return list.cache.count
+        return isHideCompletedTasks ? (list.cache.count - numberOfCompletedTask) : list.cache.count
     }
     
     func getTaskItem(forRowAt indexPath: IndexPath) -> ToDoItem? {
@@ -79,7 +81,8 @@ extension HomePresenter {
             let list = list,
             indexPath.row < list.cache.count
         else { return nil }
-        return list.cache[indexPath.row]
+        let task = isHideCompletedTasks ? (list.cache.filter { $0.completed == nil } [indexPath.row]) : list.cache[indexPath.row]
+        return task
     }
     
     func changeTaskCompletionStatus(forRowAt indexPath: IndexPath) {
@@ -118,6 +121,11 @@ extension HomePresenter {
             indexPath.row < list.cache.count
         else { return false }
         return list.cache[indexPath.row].completed == nil ? false : true
+    }
+    
+    func hideCompletedTasks() {
+        isHideCompletedTasks = !isHideCompletedTasks
+        vc?.update()
     }
 }
 

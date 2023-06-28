@@ -25,6 +25,7 @@ class HomeViewController: UIViewController {
         homeView.table.delegate = self
         homeView.table.dataSource = self
         homeView.addTaskButton.addTarget(self, action: #selector(addTaskButtonClicked(_:)), for: .touchUpInside)
+        
     }
     
     override func viewDidLoad() {
@@ -76,9 +77,11 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             guard
+                let presenter = presenter,
                 let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TaskListHeader.reuseIdentifier) as? TaskListHeader
             else { return nil }
-            header.setup(presenter?.numberOfCompletedTask ?? 0)
+            header.setup(presenter.numberOfCompletedTask, title: (presenter.isHideCompletedTasks ? .show : .hide))
+            header.button.addTarget(self, action: #selector(tapShowHedenButton(_:)), for: .touchUpInside)
             return header
         }
         return nil
@@ -208,7 +211,14 @@ extension HomeViewController {
             present(navigation, animated: true, completion: nil)
         }
     }
-    
+                
+    @objc
+    func tapShowHedenButton(_ sender: UIButton) {
+        guard let presenter = presenter else { return }
+        presenter.isHideCompletedTasks = !presenter.isHideCompletedTasks
+        update()
+    }
+                
     private func deletionWarningAlert(message: String?, handler: ((UIAlertAction) -> Void)?) {
         let title = NSLocalizedString("General.Alert.Titel.DeleteTask", comment: "Titel")
         let cancel = NSLocalizedString("General.Alert.Cancel", comment: "Cancel")

@@ -8,7 +8,6 @@
 import UIKit
 
 final class TaskListHeader: UITableViewHeaderFooterView {
-    
     static let reuseIdentifier = "TaskListHeader"
     
     static var height: CGFloat {
@@ -41,11 +40,6 @@ final class TaskListHeader: UITableViewHeaderFooterView {
     required init?(coder: NSCoder) {
         fatalError("⚠️ TaskListHeader init(coder:) has not been implemented")
     }
-
-//    override func prepareForReuse() {
-//        label.text = NSLocalizedString("HomeView.TaskList.Header.CompletedTitle", comment: "Completed") + "\u{2014}"
-//        super.prepareForReuse()
-//    }
 }
 
 
@@ -72,16 +66,30 @@ extension TaskListHeader {
             button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding.small)
         ])
         
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
     }
     
     
-    func setup(_ count: Int) {
+    func setup(_ count: Int, title: TitleButton) {
         label.text = NSLocalizedString("HomeView.TaskList.Header.CompletedTitle", comment: "Completed") + "\u{2014} \(count)"
+        button.setTitle(title.getTitle(), for: .normal)
         count > 0 ? (button.isEnabled = true) : (button.isEnabled = false)
-        let showTitle = NSLocalizedString("HomeView.TaskList.Header.Button.Show", comment: "Show")
-        let hideTitle = NSLocalizedString("HomeView.TaskList.Header.Button.Hide", comment: "Hide")
+    }
+}
+
+
+extension TaskListHeader {
     
-        count > 0 ? button.setTitle(hideTitle, for: .normal) : button.setTitle(showTitle, for: .normal)
+    enum TitleButton {
+        case hide
+        case show
+        
+        func getTitle() -> String {
+            switch self {
+            case .hide: return NSLocalizedString("HomeView.TaskList.Header.Button.Hide", comment: "Hide")
+            case .show: return NSLocalizedString("HomeView.TaskList.Header.Button.Show", comment: "Show")
+            }
+        }
     }
 }
