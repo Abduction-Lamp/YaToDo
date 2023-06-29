@@ -45,6 +45,18 @@ final class TaskListHeader: UITableViewHeaderFooterView {
 
 extension TaskListHeader {
     
+    enum TitleButton {
+        case hide
+        case show
+        
+        func getTitle() -> String {
+            switch self {
+            case .hide: return NSLocalizedString("HomeView.TaskList.Header.Button.Hide", comment: "Hide")
+            case .show: return NSLocalizedString("HomeView.TaskList.Header.Button.Show", comment: "Show")
+            }
+        }
+    }
+    
     private func buildUI() {
         contentView.addSubview(label)
         contentView.addSubview(button)
@@ -70,26 +82,9 @@ extension TaskListHeader {
         button.setContentHuggingPriority(.required, for: .horizontal)
     }
     
-    
     func setup(_ count: Int, title: TitleButton) {
         label.text = NSLocalizedString("HomeView.TaskList.Header.CompletedTitle", comment: "Completed") + "\u{2014} \(count)"
         button.setTitle(title.getTitle(), for: .normal)
         count > 0 ? (button.isEnabled = true) : (button.isEnabled = false)
-    }
-}
-
-
-extension TaskListHeader {
-    
-    enum TitleButton {
-        case hide
-        case show
-        
-        func getTitle() -> String {
-            switch self {
-            case .hide: return NSLocalizedString("HomeView.TaskList.Header.Button.Hide", comment: "Hide")
-            case .show: return NSLocalizedString("HomeView.TaskList.Header.Button.Show", comment: "Show")
-            }
-        }
     }
 }

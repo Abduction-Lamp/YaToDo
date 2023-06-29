@@ -170,8 +170,7 @@ extension TaskViewController {
         }
         conponents.segment.selectedSegmentIndex = priorityIndex
         
-        if let date = item.deadline {
-            conponents.calendar.minimumDate = date
+        if let date = item.deadline { 
             conponents.calendar.date = date
             conponents.toggle.setOn(true, animated: true)
             toggleSwitched(conponents.toggle)

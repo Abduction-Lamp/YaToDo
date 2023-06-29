@@ -69,6 +69,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         return presenter.numberOfRowsInSection()
     }
     
+    
     // MARK: - TableView Header
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         section == 0 ? TaskListHeader.height : 0
@@ -80,17 +81,21 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
                 let presenter = presenter,
                 let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TaskListHeader.reuseIdentifier) as? TaskListHeader
             else { return nil }
-            header.setup(presenter.numberOfCompletedTask, title: (presenter.isHideCompletedTasks ? .show : .hide))
+            
+            let title: TaskListHeader.TitleButton = presenter.isHideCompletedTasks ? .show : .hide
+            header.setup(presenter.numberOfCompletedTask, title: title)
             header.button.addTarget(self, action: #selector(tapShowHedenButton(_:)), for: .touchUpInside)
             return header
         }
         return nil
     }
     
+    
     // MARK: - TableView Cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let item = presenter?.getTaskItem(forRowAt: indexPath),
-              let cell = tableView.dequeueReusableCell(withIdentifier: "\(UITableViewCell.self)")
+        guard
+            let item = presenter?.getTaskItem(forRowAt: indexPath),
+            let cell = tableView.dequeueReusableCell(withIdentifier: "\(UITableViewCell.self)")
         else { return UITableViewCell() }
         
         cell.accessoryType = .disclosureIndicator
@@ -100,6 +105,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard let presenter = presenter else { return nil }
+        
         let checkSwipeAction = UIContextualAction(style: .normal, title: "") { (action, sourceView, completionHandler) in
             presenter.changeTaskCompletionStatus(forRowAt: indexPath)
             completionHandler(true)
@@ -138,6 +144,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 }
  
 
+// MARK: - Configurations
 extension HomeViewController {
     
     private func makeContentConfiguration(for item: ToDoItem) -> UIListContentConfiguration {
@@ -147,7 +154,7 @@ extension HomeViewController {
         content.directionalLayoutMargins.top = padding.medium
         content.directionalLayoutMargins.bottom = padding.medium
         
-        content.attributedText = getTextAttributedString(for: item)
+        content.attributedText = getBodyAttributedString(for: item)
         content.textProperties.numberOfLines = 3
         content.textToSecondaryTextVerticalPadding = padding.small
         
@@ -168,7 +175,7 @@ extension HomeViewController {
         return content
     }
     
-    private func getTextAttributedString(for item: ToDoItem) -> NSAttributedString? {
+    private func getBodyAttributedString(for item: ToDoItem) -> NSAttributedString? {
         var attributes: [NSAttributedString.Key: Any] = [:]
         if item.completed == nil {
             attributes[.foregroundColor] = UIColor.label
@@ -203,6 +210,7 @@ extension HomeViewController {
 }
 
 
+// MARK: - Actions
 extension HomeViewController {
     
     @objc
