@@ -35,7 +35,7 @@ final class FileCacheOperation: Cacheable {
     
     private let concurrent = OperationQueue()
     private let serial = OperationQueue()
-        
+    
     private var root: URL? = nil
     private(set) var cache: [ToDoItem] = []
     

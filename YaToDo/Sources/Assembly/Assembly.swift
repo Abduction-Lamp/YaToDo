@@ -11,7 +11,7 @@ protocol Buildable: AnyObject {
     
     init(cache: Cacheable)
     
-    func makeHomeModule(router: Routable) -> UIViewController & HomeViewControllerProtocol
+    func makeHomeModule(router: Routable) -> UIViewController & HomeViewControllerDisplayable
     func makeTaskModule(task: ToDoItem?, callback: ((ToDoItem?) -> Void)?) -> UIViewController & TaskViewControllerProtocol
 }
 
@@ -24,7 +24,7 @@ final class Assembly: Buildable {
         self.cache = cache
     }
     
-    func makeHomeModule(router: Routable) -> UIViewController & HomeViewControllerProtocol {
+    func makeHomeModule(router: Routable) -> UIViewController & HomeViewControllerDisplayable {
         let vc = HomeViewController()
         vc.presenter = HomePresenter(vc, router: router, cache: cache)
         return vc

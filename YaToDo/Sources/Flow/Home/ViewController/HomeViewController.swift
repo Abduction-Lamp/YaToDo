@@ -16,7 +16,7 @@ class HomeViewController: UIViewController {
         return view
     }
     
-    var presenter: HomePresenterProtocol?
+    var presenter: HomePresentable?
     
     
     override func loadView() {
@@ -45,13 +45,13 @@ class HomeViewController: UIViewController {
 }
 
 
-extension HomeViewController: HomeViewControllerProtocol {
+extension HomeViewController: HomeViewControllerDisplayable {
     
-    func update() {
+    func displa() {
         homeView.table.reloadData()
     }
     
-    func update(index: Int) {
+    func display(index: Int) {
         homeView.table.reloadData()
     }
 }
@@ -224,7 +224,7 @@ extension HomeViewController {
     func tapShowHedenButton(_ sender: UIButton) {
         guard let presenter = presenter else { return }
         presenter.isHideCompletedTasks = !presenter.isHideCompletedTasks
-        update()
+        displa()
     }
                 
     private func deletionWarningAlert(message: String?, handler: ((UIAlertAction) -> Void)?) {
