@@ -18,7 +18,7 @@ class TaskComponentsView: UIView {
         return label
     }()
     
-    private(set) var segment: UISegmentedControl = {
+    private(set) var prioritySegment: UISegmentedControl = {
         let selectedTextAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor.systemRed,
             NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: UIFont.labelFontSize)
@@ -124,7 +124,7 @@ extension TaskComponentsView {
         layer.cornerRadius = 10
         
         addSubview(priorityLabel)
-        addSubview(segment)
+        addSubview(prioritySegment)
         
         deadlineStack.addArrangedSubview(deadlineLabel)
         deadlineStack.addArrangedSubview(deadlineInfoLabel)
@@ -145,13 +145,13 @@ extension TaskComponentsView {
         NSLayoutConstraint.activate([
             priorityLabel.topAnchor.constraint(equalTo: topAnchor),
             priorityLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding.medium),
-            priorityLabel.trailingAnchor.constraint(equalTo: segment.leadingAnchor, constant: -padding.small),
+            priorityLabel.trailingAnchor.constraint(equalTo: prioritySegment.leadingAnchor, constant: -padding.small),
             priorityLabel.heightAnchor.constraint(equalToConstant: heightСell),
             
-            segment.leadingAnchor.constraint(equalTo: centerXAnchor),
-            segment.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding.small),
-            segment.centerYAnchor.constraint(equalTo: priorityLabel.centerYAnchor),
-            segment.heightAnchor.constraint(equalToConstant: heightСell - 2 * padding.small),
+            prioritySegment.leadingAnchor.constraint(equalTo: centerXAnchor),
+            prioritySegment.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding.small),
+            prioritySegment.centerYAnchor.constraint(equalTo: priorityLabel.centerYAnchor),
+            prioritySegment.heightAnchor.constraint(equalToConstant: heightСell - 2 * padding.small),
 
             firstSeparator.topAnchor.constraint(equalTo: topAnchor, constant: heightСell),
             firstSeparator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding.medium),
@@ -159,7 +159,7 @@ extension TaskComponentsView {
             firstSeparator.heightAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale),
             
             toggle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding.small),
-            toggle.centerYAnchor.constraint(equalTo: segment.centerYAnchor, constant: heightСell),
+            toggle.centerYAnchor.constraint(equalTo: prioritySegment.centerYAnchor, constant: heightСell),
             
             deadlineStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding.medium),
             deadlineStack.trailingAnchor.constraint(equalTo: toggle.leadingAnchor, constant: -padding.small),

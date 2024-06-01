@@ -168,7 +168,7 @@ extension TaskViewController {
         case .normal: priorityIndex = 1
         case .high: priorityIndex = 2
         }
-        conponents.segment.selectedSegmentIndex = priorityIndex
+        conponents.prioritySegment.selectedSegmentIndex = priorityIndex
         
         if let date = item.deadline { 
             conponents.calendar.date = date
@@ -214,7 +214,7 @@ extension TaskViewController {
     private func saveButtonClicked(_ sender: UIBarButtonItem) {
         let text = body.textView.text ?? ""
         var priority: Priority = .normal
-        switch conponents.segment.selectedSegmentIndex {
+        switch conponents.prioritySegment.selectedSegmentIndex {
         case 0: priority = .low
         case 2: priority = .high
         default: break
@@ -311,9 +311,8 @@ extension TaskViewController: UIGestureRecognizerDelegate {
         if touch.view?.isDescendant(of: conponents.calendar) == true {
             conponents.calendar.sendActions(for: .valueChanged)
             return false
-        } else {
-            return true
         }
+        return true
     }
 }
 
