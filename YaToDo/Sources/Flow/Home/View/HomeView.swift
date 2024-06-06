@@ -14,7 +14,7 @@ class HomeView: UIView {
         table.translatesAutoresizingMaskIntoConstraints = false
         table.separatorStyle = .singleLine
         table.register(TaskListHeader.self, forHeaderFooterViewReuseIdentifier: TaskListHeader.reuseIdentifier)
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "\(UITableViewCell.self)")
+        table.register(TaskInListCell.self, forCellReuseIdentifier: TaskInListCell.reuseIdentifier)
         return table
     }()
     

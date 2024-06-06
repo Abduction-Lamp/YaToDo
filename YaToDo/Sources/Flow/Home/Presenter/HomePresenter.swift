@@ -7,13 +7,17 @@
 
 import UIKit
 
+enum State {
+    case reload
+    case update
+}
 
 protocol HomeViewControllerDisplayable: AnyObject {
     
     var presenter: HomePresentable? { get set }
     
-    func displa()
-    func display(index: Int)
+    func display(_ state: State)
+//    func display(index: Int)
 }
 
 
@@ -21,11 +25,13 @@ protocol HomePresentable: AnyObject {
     
     init(_ viewController: HomeViewControllerDisplayable, router: Routable, cache: Cacheable)
     
+    var snapshot: [String]? { get }
+    
     var numberOfCompletedTask: Int { get }
     var isHideCompletedTasks: Bool { set get }
     
-    func numberOfSections() -> Int
-    func numberOfRowsInSection() -> Int
+//    func numberOfSections() -> Int
+//    func numberOfRowsInSection() -> Int
     
     func getTaskItem(forRowAt indexPath: IndexPath) -> ToDoItem?
     func changeTaskCompletionStatus(forRowAt indexPath: IndexPath)
@@ -46,7 +52,11 @@ final class HomePresenter: HomePresentable {
     private weak var list: Cacheable?   // Список задач пользователя
     
     var numberOfCompletedTask: Int = 0
-    var isHideCompletedTasks = false
+    var isHideCompletedTasks = false {
+        didSet {
+            vc?.display(.update)
+        }
+    }
     
     
     init(_ viewController: HomeViewControllerDisplayable, router: Routable, cache: Cacheable) {
@@ -58,6 +68,17 @@ final class HomePresenter: HomePresentable {
         print(numberOfCompletedTask)
     }
 }
+
+
+
+extension HomePresenter {
+
+    var snapshot: [String]? {
+        guard let list = list else { return nil }
+        return isHideCompletedTasks ? (list.cache.filter { $0.completed == nil }.map { $0.id } ) : list.cache.map { $0.id }
+    }
+}
+
 
 
 extension HomePresenter {
@@ -93,7 +114,7 @@ extension HomePresenter {
         
         if let _ = list?.change(id: task.id, new: new) {
             numberOfCompletedTask = getNumberOfCompletedTask()
-            vc?.displa()
+            vc?.display(.reload)
         }
     }
     
@@ -102,7 +123,7 @@ extension HomePresenter {
 
         if let _ = list?.remove(id: task.id) {
             numberOfCompletedTask = getNumberOfCompletedTask()
-            vc?.displa()
+            vc?.display(.update)
         }
     }
     
@@ -116,7 +137,7 @@ extension HomePresenter {
     
     func hideCompletedTasks() {
         isHideCompletedTasks = !isHideCompletedTasks
-        vc?.displa()
+        vc?.display(.update)
     }
 }
 
@@ -127,7 +148,7 @@ extension HomePresenter {
         guard let router = router else { return UINavigationController() }
         return router.task(nil) { [weak self] new in
             if let self = self, let new = new, let list = self.list, list.add(new) {
-                self.vc?.displa()
+//                self.vc?.display(.update)
             }
         }
     }
@@ -147,7 +168,7 @@ extension HomePresenter {
             } else {
                 let _ = self.list?.remove(id: item.id)
             }
-            self.vc?.displa()
+//            self.vc?.display()
         }
     }
 }
