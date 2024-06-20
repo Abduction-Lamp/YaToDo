@@ -50,8 +50,28 @@
 
 import Foundation
 
+enum CacheModelState {
+    case all
+    case current
+    case completed
+    
+    mutating func toggle() {
+        switch self {
+        case .all: 
+            self = .current
+        default: 
+            self = .all
+        }
+    }
+}
+
 protocol Cacheable: AnyObject {
     var cache: [ToDoItem] { get }
+    
+    var numberOfCompletedTask: Int { get }
+    
+    func get(_ state: CacheModelState) -> [ToDoItem]
+    
     
     func add(_ item: ToDoItem) -> Bool
     func change(id: String, new item: ToDoItem) -> ToDoItem?
@@ -72,13 +92,13 @@ enum FileCacheError: Error, CustomStringConvertible {
     var description: String {
         var mesage = "⚠️ "
         switch self {
-        case let .createDirectory(error):  mesage += "error create directory: \(error.localizedDescription)"
-        case let .getDirectory(error):     mesage += "error get directory: \(error.localizedDescription)"
-        case let .getFiles(error):         mesage += "error get files: \(error.localizedDescription)"
-        case let .readFile(error):         mesage += "error read file: \(error.localizedDescription)"
-        case let .writeFile(error):        mesage += "error write file: \(error.localizedDescription)"
-        case let .removeFile(error):       mesage += "error remove file: \(error.localizedDescription)"
-        case let .removeAllFile(error):    mesage += "error remove all files: \(error.localizedDescription)"
+        case let .createDirectory(error):  mesage += "error create directory: " + error.localizedDescription
+        case let .getDirectory(error):     mesage += "error get directory: "    + error.localizedDescription
+        case let .getFiles(error):         mesage += "error get files: "        + error.localizedDescription
+        case let .readFile(error):         mesage += "error read file: "        + error.localizedDescription
+        case let .writeFile(error):        mesage += "error write file: "       + error.localizedDescription
+        case let .removeFile(error):       mesage += "error remove file: "      + error.localizedDescription
+        case let .removeAllFile(error):    mesage += "error remove all files: " + error.localizedDescription
         case .nonResult:                   mesage += "error non result"
         }
         return mesage

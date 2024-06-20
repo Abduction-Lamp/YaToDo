@@ -1,54 +1,60 @@
 //
-//  TaskInListCell.swift
+//  CellForTaskList.swift
 //  YaToDo
 //
-//  Created by Vladimir Lesnykh on 06.06.2024.
+//  Created by Vladimir Lesnykh on 11.06.2024.
 //
 
 import UIKit
 
-final class TaskInListCell: UITableViewCell {
+final class CellForTaskList: UITableViewCell {
     
-    var item: ToDoItem?
+    var model: ToDoItem?
     
-
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        automaticallyUpdatesContentConfiguration = false
+        automaticallyUpdatesBackgroundConfiguration = false
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("\(Self.description()): init(coder:) has not been implemented")
+    }
+    
     override func updateConfiguration(using state: UICellConfigurationState) {
         super.updateConfiguration(using: state)
         
-        accessoryType = .disclosureIndicator
-        
-        guard let item = item else { return }
+        guard let model = model else { return }
         
         let padding = Design.shared.padding
-        var content = defaultContentConfiguration().updated(for: state)
+        var configuration = defaultContentConfiguration().updated(for: state)
         
-        content.directionalLayoutMargins.top = padding.medium
-        content.directionalLayoutMargins.bottom = padding.medium
+        configuration.directionalLayoutMargins.top = padding.medium
+        configuration.directionalLayoutMargins.bottom = padding.medium
         
-        content.attributedText = makeBodyAttributedString(for: item)
-        content.textProperties.numberOfLines = 3
-        content.textToSecondaryTextVerticalPadding = padding.small
+        configuration.attributedText = makeBodyAttributedString(for: model)
+        configuration.textProperties.numberOfLines = 3
+        configuration.textToSecondaryTextVerticalPadding = padding.small
         
-        if item.completed == nil {
-            content.secondaryAttributedText = makeDeadlineAttributedString(for: item)
-            content.secondaryTextProperties.numberOfLines = 1
-            content.image = UIImage(systemName: "circle")
-            content.imageProperties.tintColor = (item.priority == .high) ? .systemRed : .placeholderText
+        if model.completed == nil {
+            configuration.secondaryAttributedText = makeDeadlineAttributedString(for: model)
+            configuration.secondaryTextProperties.numberOfLines = 1
+            configuration.image = UIImage(systemName: "circle")
+            configuration.imageProperties.tintColor = (model.priority == .high) ? .systemRed : .placeholderText
         } else {
-            content.image = UIImage(systemName: "checkmark.circle.fill")
-            content.imageProperties.tintColor = .systemGreen
+            configuration.image = UIImage(systemName: "checkmark.circle.fill")
+            configuration.imageProperties.tintColor = .systemGreen
         }
-        contentConfiguration = content
+        contentConfiguration = configuration
     }
-    
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        item = nil
+        model = nil
     }
-}
-
-extension TaskInListCell {
+    
+    
     
     private func makeBodyAttributedString(for item: ToDoItem) -> NSAttributedString? {
         var attributes: [NSAttributedString.Key: Any] = [:]

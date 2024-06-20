@@ -13,8 +13,8 @@ class HomeView: UIView {
         let table = UITableView(frame: .zero, style: .insetGrouped)
         table.translatesAutoresizingMaskIntoConstraints = false
         table.separatorStyle = .singleLine
-        table.register(TaskListHeader.self, forHeaderFooterViewReuseIdentifier: TaskListHeader.reuseIdentifier)
-        table.register(TaskInListCell.self, forCellReuseIdentifier: TaskInListCell.reuseIdentifier)
+        table.register(HeaderForTaskList.self, forHeaderFooterViewReuseIdentifier: HeaderForTaskList.reuseIdentifier)
+        table.register(CellForTaskList.self, forCellReuseIdentifier: CellForTaskList.reuseIdentifier)
         return table
     }()
     
@@ -44,7 +44,7 @@ class HomeView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("⚠️ HomeView init(coder:) has not been implemented")
+        fatalError("\(Self.description()) init(coder:) has not been implemented")
     }
     
     private func buildUI() {

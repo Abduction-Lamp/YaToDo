@@ -7,114 +7,73 @@
 
 import UIKit
 
-enum State {
-    case reload
-    case update
-}
-
-protocol HomeViewControllerDisplayable: AnyObject {
-    
-    var presenter: HomePresentable? { get set }
-    
-    func display(_ state: State)
-//    func display(index: Int)
-}
-
-
 protocol HomePresentable: AnyObject {
     
     init(_ viewController: HomeViewControllerDisplayable, router: Routable, cache: Cacheable)
     
     var snapshot: [String]? { get }
     
-    var numberOfCompletedTask: Int { get }
-    var isHideCompletedTasks: Bool { set get }
-    
-//    func numberOfSections() -> Int
-//    func numberOfRowsInSection() -> Int
-    
+    func getHeaderItem() -> HeaderForTaskList.Model
     func getTaskItem(forRowAt indexPath: IndexPath) -> ToDoItem?
     func changeTaskCompletionStatus(forRowAt indexPath: IndexPath)
     func removeTask(forRowAt indexPath: IndexPath)
+        
+    func changeModelState()
     
-    func isCompleted(forRowAt indexPath: IndexPath) -> Bool
-    
-    func showNewTask() -> UINavigationController
-    func showTaskDetails(indexPath: IndexPath) -> UINavigationController
+    func presentNewTaskVC() -> UINavigationController
+    func presentTaskDetailsVC(indexPath: IndexPath) -> UINavigationController
 }
-
 
 
 final class HomePresenter: HomePresentable {
     
     private weak var vc: HomeViewControllerDisplayable?
     private weak var router: Routable?
-    private weak var list: Cacheable?   // Список задач пользователя
+    private weak var list: Cacheable?
     
-    var numberOfCompletedTask: Int = 0
-    var isHideCompletedTasks = false {
+    private var state: CacheModelState = .all {
         didSet {
-            vc?.display(.update)
+            vc?.display(.update(animated: true))
         }
     }
     
-    
     init(_ viewController: HomeViewControllerDisplayable, router: Routable, cache: Cacheable) {
-        vc = viewController
+        self.vc = viewController
         self.router = router
-        list = cache
-        
-        numberOfCompletedTask = getNumberOfCompletedTask()
-        print(numberOfCompletedTask)
+        self.list = cache
     }
-}
-
-
-
-extension HomePresenter {
+    
 
     var snapshot: [String]? {
         guard let list = list else { return nil }
-        return isHideCompletedTasks ? (list.cache.filter { $0.completed == nil }.map { $0.id } ) : list.cache.map { $0.id }
-    }
-}
-
-
-
-extension HomePresenter {
-    
-    func numberOfSections() -> Int {
-        return 1
+        return list.get(state).map { $0.id }
     }
     
-    func numberOfRowsInSection() -> Int {
-        guard let list = list else { return 0 }
-        return isHideCompletedTasks ? (list.cache.count - numberOfCompletedTask) : list.cache.count
+    func getHeaderItem() -> HeaderForTaskList.Model {
+        HeaderForTaskList.Model(copmleted: list?.get(.completed).count ?? 0, state: state)
     }
     
     func getTaskItem(forRowAt indexPath: IndexPath) -> ToDoItem? {
         guard
-            let list = list,
-            indexPath.row < numberOfRowsInSection()
+            let tasks = list?.get(state),
+            indexPath.row < tasks.count
         else { return nil }
         
-        let task = isHideCompletedTasks ? (list.cache.filter { $0.completed == nil } [indexPath.row]) : list.cache[indexPath.row]
-        return task
+        return tasks[indexPath.row]
     }
     
     func changeTaskCompletionStatus(forRowAt indexPath: IndexPath) {
         guard let task = getTaskItem(forRowAt: indexPath) else { return }
         
-        let new = ToDoItem(id: task.id,
-                           text: task.text,
-                           priority: task.priority,
-                           date: task.date,
-                           deadline: task.deadline,
+        let new = ToDoItem(id:        task.id,
+                           text:      task.text,
+                           priority:  task.priority,
+                           date:      task.date,
+                           deadline:  task.deadline,
                            completed: task.completed == nil ? Date() : nil)
         
         if let _ = list?.change(id: task.id, new: new) {
-            numberOfCompletedTask = getNumberOfCompletedTask()
-            vc?.display(.reload)
+            vc?.display((state == .all) ? .reload(animated: false) : .update(animated: true))
         }
     }
     
@@ -122,62 +81,46 @@ extension HomePresenter {
         guard let task = getTaskItem(forRowAt: indexPath) else { return }
 
         if let _ = list?.remove(id: task.id) {
-            numberOfCompletedTask = getNumberOfCompletedTask()
-            vc?.display(.update)
+            vc?.display(.update(animated: true))
         }
     }
     
-    func isCompleted(forRowAt indexPath: IndexPath) -> Bool {
-        guard
-            let list = list,
-            indexPath.row < numberOfRowsInSection()
-        else { return false }
-        return list.cache[indexPath.row].completed == nil ? false : true
+    func changeModelState() {
+        state.toggle()
+        vc?.reloadHeader()
     }
-    
-    func hideCompletedTasks() {
-        isHideCompletedTasks = !isHideCompletedTasks
-        vc?.display(.update)
-    }
-}
 
-
-extension HomePresenter {
     
-    func showNewTask() -> UINavigationController {
+    func presentNewTaskVC() -> UINavigationController {
         guard let router = router else { return UINavigationController() }
+        
         return router.task(nil) { [weak self] new in
             if let self = self, let new = new, let list = self.list, list.add(new) {
-//                self.vc?.display(.update)
+                self.vc?.display(.update(animated: true))
             }
         }
     }
     
-    func showTaskDetails(indexPath: IndexPath) -> UINavigationController {
+    func presentTaskDetailsVC(indexPath: IndexPath) -> UINavigationController {
         guard
             let router = router,
-            let list = list,
-            indexPath.row < numberOfRowsInSection()
+            let tasks = list?.get(state),
+            indexPath.row < tasks.count
         else { return UINavigationController() }
         
-        let item = list.cache[indexPath.row]
+        let item = tasks[indexPath.row]
+        
         return router.task(item) { [weak self] new in
             guard let self = self else { return }
             if let new = new {
                 let _ = self.list?.change(id: item.id, new: new)
+                self.vc?.display(.reload(animated: false))
+                return
             } else {
                 let _ = self.list?.remove(id: item.id)
+                self.vc?.display(.update(animated: true))
+                return
             }
-//            self.vc?.display()
         }
-    }
-}
-
-
-extension HomePresenter {
-
-    private func getNumberOfCompletedTask() -> Int {
-        guard let list = list else { return 0 }
-        return list.cache.filter { $0.completed != nil }.count
     }
 }

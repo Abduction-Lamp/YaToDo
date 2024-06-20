@@ -32,14 +32,18 @@
 import Foundation
 
 final class FileCacheOperation: Cacheable {
-    
+
     private let concurrent = OperationQueue()
     private let serial = OperationQueue()
     
     private var root: URL? = nil
     private(set) var cache: [ToDoItem] = []
     
+    var numberOfCompletedTask: Int {
+        cache.reduce(0) { $0 + ($1.completed == nil ? 0 : 1) }
+    }
     
+
     init() {
         concurrent.name = "FileCache: Concurrent Queue"
         serial.name = "FileCache: Serial Queue"
@@ -49,6 +53,13 @@ final class FileCacheOperation: Cacheable {
         fetch()
     }
     
+    func get(_ state: CacheModelState) -> [ToDoItem] {
+        switch state {
+        case .all:       cache
+        case .current:   cache.filter { $0.completed == nil }
+        case .completed: cache.filter { $0.completed != nil }
+        }
+    }
     
     func add(_ item: ToDoItem) -> Bool {
         if !cache.contains(item) {
